@@ -21,12 +21,16 @@ class StartsController extends Controller
 
             
             if ($task['user_id']==$user['id']){
-            
-                if ($task['status']==0){    //タスクのステータスが0=停止中ならスタート時のコメントを入力
+  
+//      新規作成時　にスタートしてもOK
+//      スタート中にスタートすることはないけど別に問題ないのでOK
+//      ストップ中にスタートすることはあるのでOK
+//      完了しても何かの拍子に動かしたくなるかもしれないのでOK
+// 消す             if ($task['status']==0){    //タスクのステータスが0=停止中ならスタート時のコメントを入力
                     return view('tasks.start', [
                         'task' => $task,
                     ]);
-                }
+//                }
             }
         }
     return redirect('/');

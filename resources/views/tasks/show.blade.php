@@ -10,15 +10,13 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col-sm-3">開始コメント</th>
-                    <th class="col-sm-3">日時</th>
+                    <th>開始コメント</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($starts as $start)
                 <tr>
-                    <td>{{ $start->content }}</td>
-                    <td>{{ $start->created_at}}</td>
+                    <td><p>{{ $start->content }}</p><span class="text-muted">{{ $start->created_at}}</span></td>
                 </tr>
                 @endforeach
 
@@ -31,16 +29,14 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col-sm-3">停止コメント</th>
-                    <th class="col-sm-3">日時</th>
+                    <th>停止コメント</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($stops as $stop)
                 <tr>
-                    <td>{{ $stop->content }}</td>
-                    <td>{{ $stop->created_at}}</td>
-                </tr>
+                    <td><p>{{ $stop->content }}</p><span class="text-muted">{{ $stop->created_at}}</span></td>
+                </tr>                
                 @endforeach
 
             </tbody>

@@ -128,7 +128,23 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $task = Task::find($id);
+            $this->validate($request, [
+            'content' => 'required|max:191',
+        ]);
+        if ($task['user_id']==$user['id']){
+        
+
+        $task->lastcomment = $request['content'];
+        $task->status = 3;
+        $task->save();
+        }
+
+    }
+        return redirect('/');
     }
 
     /**
@@ -153,7 +169,23 @@ class TasksController extends Controller
     }
         return redirect('/');
     }
-    
 
+    public function finish($id)
+    {
+        if (\Auth::check()) {
+            $task_id = $id;
+            $user = \Auth::user();
+            $task = Task::find($id);
+
+   
+            if ($task['user_id']==$user['id']){
+                    return view('tasks.finish', [
+                        'task' => $task,
+                    ]);
+
+            }
+        }
+        return redirect('/');
+    }
     
 }

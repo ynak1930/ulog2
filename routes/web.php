@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 Route::resource('tasks', 'TasksController');
-
+Route::put('tasks/{id}/finish', 'TasksController@finish')->name('tasks.finish');
 
 
 Route::resource('starts', 'StartsController');

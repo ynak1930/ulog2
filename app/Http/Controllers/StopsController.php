@@ -17,9 +17,9 @@ class StopsController extends Controller
             $user = \Auth::user();
             $task = Task::find($id);
 
-            
+   
             if ($task['user_id']==$user['id']){
-            
+//status==1で動いてないとストップできないのでここは消さない
                 if ($task['status']==1){    //タスクのステータスが1で稼働中なら停止時のコメントを入力
                     return view('tasks.stop', [
                         'task' => $task,

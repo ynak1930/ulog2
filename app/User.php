@@ -64,7 +64,7 @@ class User extends Authenticatable
 
                 $task->lastcomment = $content;
                 $task->stop_at = now();
-                $task->status = 0;    // 追加                
+                $task->status = 2;    // 追加 //変更0425、0に戻してたけど2に変更
 
                 // 1つ目の時刻
                 $timestamp = strtotime($task->start_at);
