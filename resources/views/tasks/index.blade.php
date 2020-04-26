@@ -82,6 +82,30 @@
                             @if ($task->status!=1)
                             <!--タイムゾーンの設定で9時間足されちゃうので9時間マイナス・他にいい方法が無いか探す-->
                             {{ date('H:i:s',$task->timer-60*60*9) }}
+
+                            @elseif ($task->status==1)
+                                <h1 id="time"></h1>
+
+                                <script type="text/javascript">
+                                    time();
+                                    function time(){
+                                        var start_at = <?php echo json_encode($task->start_at); ?>;
+                                        var timer = <?php echo json_encode($task->timer); ?>;
+                                        var timer = timer * 1000;
+                                        var from = new Date(start_at);
+                                        //var from = new Date("2016/3/1 23:44:59");
+                                        var now = new Date();
+                                        
+                                        // 経過時間をミリ秒で取得
+                                        var ms = new Date(now.getTime() - from.getTime()+timer-60*60*9*1000);
+                                        // ミリ秒を日付に変換(端数切捨て)
+                                        var days = Math.floor(ms / (1000*60*60*24));
+                                        
+                                        //document.getElementById("time").innerHTML = days.toLocaleTimeString();
+                                        document.getElementById("time").innerHTML = ms.toLocaleTimeString();
+                                    }
+                                    setInterval('time()',1000);
+                                </script>
                             @endif
 
                     </td>
