@@ -8,6 +8,9 @@
     <h1>{{ Auth::user()->name }}　のプロジェクト一覧 -     {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}</h1>
 
     @if (count($tasks) > 0)
+
+
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -84,28 +87,7 @@
                             {{ date('H:i:s',$task->timer-60*60*9) }}
 
                             @elseif ($task->status==1)
-                                <span class="badge badge-success">実行中</span><strong id="time"></strong>
-
-                                <script type="text/javascript">
-                                    time();
-                                    function time(){
-                                        var start_at = <?php echo json_encode($task->start_at); ?>;
-                                        var timer = <?php echo json_encode($task->timer); ?>;
-                                        var timer = timer * 1000;
-                                        var from = new Date(start_at);
-                                        //var from = new Date("2016/3/1 23:44:59");
-                                        var now = new Date();
-                                        
-                                        // 経過時間をミリ秒で取得
-                                        var ms = new Date(now.getTime() - from.getTime()+timer-60*60*9*1000);
-                                        // ミリ秒を日付に変換(端数切捨て)
-                                        var days = Math.floor(ms / (1000*60*60*24));
-                                        
-                                        //document.getElementById("time").innerHTML = days.toLocaleTimeString();
-                                        document.getElementById("time").innerHTML = ms.toLocaleTimeString();
-                                    }
-                                    setInterval('time()',1000);
-                                </script>
+                                <span class="badge badge-success">実行中</span>
                             @endif
 
                     </td>
