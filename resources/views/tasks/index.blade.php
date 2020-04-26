@@ -8,7 +8,7 @@
     <h1>{{ Auth::user()->name }}　のプロジェクト一覧 -     {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}</h1>
 
     @if (count($tasks) > 0)
-        <table class="table table-striped table-bordered">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th class="text-center">id</th>
@@ -130,15 +130,15 @@
                 </tr>
                 <tr>
                     @if ($task->status==0)<!--new-->
-                        <td class="text-center alert alert-info">
+                        <td  rowspan=2  class="text-center alert alert-info">
                     @elseif ($task->status==1)<!--start(move)-->
-                        <td class="alert alert-success text-center">
+                        <td  rowspan=2  class="alert alert-success text-center">
                     @elseif ($task->status==2)<!--stop(stop)-->
-                        <td class="alert alert-danger text-center">
+                        <td  rowspan=2  class="alert alert-danger text-center">
                     @elseif ($task->status==3)<!--finish(finish)-->
-                        <td class="alert alert-secondary text-center">
+                        <td  rowspan=2  class="alert alert-secondary text-center">
                     @else
-                        <td>
+                        <td  rowspan=2 >
                     @endif
                         
                         @if ($task->status!=3)
@@ -150,10 +150,29 @@
                         
                     </td>
                     
-                    <td>
+                    <td colspan=2>
                          {!! nl2br(e($task->lastcomment)) !!}
                     </td>
-                    <td>
+
+                    @if ($task->status==0)<!--new-->
+                        <td rowspan=2 class="text-center alert alert-info">
+                    @elseif ($task->status==1)<!--start(move)-->
+                        <td rowspan=2  class="alert alert-success text-center">
+                    @elseif ($task->status==2)<!--stop(stop)-->
+                        <td rowspan=2  class="alert alert-danger text-center">
+                    @elseif ($task->status==3)<!--finish(finish)-->
+                        <td rowspan=2  class="alert alert-secondary text-center">
+                    @else
+                        <td rowspan=2 >
+                    @endif
+                        {!! Form::model($task, ['route' => ['tasks.destroy', $task->id], 'method' => 'delete']) !!}
+                        <!--<i class="fas fa-trash-alt"></i>この画像を使う-->
+                        {!! Form::submit('削除', ['class' => 'mt-3 btn btn-danger']) !!}
+                        {!! Form::close() !!}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2>
                     @if ($task->status==0)<!--new-->
                         <span class="text-muted">{{' - '.$task->created_at}}に作成</span>
                     @elseif ($task->status==1)<!--start(move)-->
@@ -163,25 +182,8 @@
                     @elseif ($task->status==3)<!--finish(finish)-->
                         <span class="text-muted">{{' - '.$task->stop_at}}に完了</span>
                     @else
-                        <td>
                     @endif
                         
-                    </td>
-                    @if ($task->status==0)<!--new-->
-                        <td class="text-center alert alert-info">
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td class="alert alert-success text-center">
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--finish(finish)-->
-                        <td class="alert alert-secondary text-center">
-                    @else
-                        <td>
-                    @endif
-                        {!! Form::model($task, ['route' => ['tasks.destroy', $task->id], 'method' => 'delete']) !!}
-                        <!--<i class="fas fa-trash-alt"></i>この画像を使う-->
-                        {!! Form::submit('削除', ['class' => 'mt-3 btn btn-danger']) !!}
-                        {!! Form::close() !!}
                     </td>
                 </tr>
                 @endforeach
