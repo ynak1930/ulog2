@@ -68,7 +68,7 @@
                             <span class="badge badge-info">新着</span>
                     @elseif ($task->status==1)<!--start(move)-->
                         <td class="alert alert-success text-left">
-                            <span class="badge badge-success">実行中</span>
+
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td class="alert alert-danger text-left">
                             <span class="badge badge-warning">停止中</span>
@@ -84,7 +84,7 @@
                             {{ date('H:i:s',$task->timer-60*60*9) }}
 
                             @elseif ($task->status==1)
-                                <h1 id="time"></h1>
+                                <span class="badge badge-success">実行中</span><strong id="time"></strong>
 
                                 <script type="text/javascript">
                                     time();
