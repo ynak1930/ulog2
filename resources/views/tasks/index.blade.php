@@ -2,15 +2,18 @@
 
 @section('content')
 
-<!-- ここにページ毎のコンテンツを書く -->
-    @if (Auth::check())
 
-    <h1>{{ Auth::user()->name }}　のプロジェクト一覧 -     {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}</h1>
+    @if (Auth::check())
+    <div>
+        <h1>{{ Auth::user()->name }} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}</h1>
+    </div>
 
     @if (count($tasks) > 0)
-
-
-
+        <div class="m-3">
+            <p>
+            <span id="timers_base" class="text-center"><strong id="timers"></strong></span>
+            </p>
+        </div>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -23,18 +26,7 @@
                 @foreach ($tasks as $task)
 
                 <tr>
-            <!--
-            現状はstatus
-            0=新規作成時、ストップ時
-            1=スタート時
-            
-            これを
-            0=新規作成
-            1=スタート時
-            2=ストップ時
-            3=完了時
-            に変更する。
-            -->
+
                     @if ($task->status==0)<!--new-->
                         <td class="text-center alert alert-info">
                             <span class="badge badge-info">新着</span>
@@ -88,6 +80,7 @@
 
                             @elseif ($task->status==1)
                                 <span class="badge badge-success">実行中</span>
+                                <strong id="{{$task->id}}"></strong>
                             @endif
 
                     </td>
@@ -171,7 +164,52 @@
                 @endforeach
             </tbody>
         </table>
+
+
         {{ $tasks->links() }}
+        
+        <script type="text/javascript">
+        var start_at = new Array();
+        var timer = new Array();
+        var id = new Array();
+        var cnt = 0;
+        
+        @foreach ($tasks as $task)
+            @if ($task->status==1)
+                start_at[cnt] = "<?php echo htmlspecialchars($task->start_at, ENT_QUOTES, 'UTF-8');?>";
+                timer[cnt]    = "<?php echo htmlspecialchars($task->timer, ENT_QUOTES, 'UTF-8');?>";
+                timer[cnt] = timer[cnt] * 1000;
+                id[cnt]       = "<?php echo htmlspecialchars($task->id, ENT_QUOTES, 'UTF-8');?>";
+                cnt++;
+            @endif
+        @endforeach
+
+        function time(){
+        
+        for (  var i = 0;  i < cnt;  i++  ) {
+                var now  = new Date();
+                var from = new Date(start_at[i]);
+                var ms   = new Date(now.getTime() - from.getTime()+timer[i]-60*60*9*1000);// 経過時間をミリ秒で取得
+                document.getElementById(id[i]).innerHTML = ms.toLocaleTimeString();
+            }
+
+        }
+        
+        if (cnt==1){
+                var elem = document.getElementById("timers_base");
+                elem.innerHTML = "<span id='timers_base' class='alert alert-success  text-center'><strong id='timers'>"+cnt+" timer</strong></span>";
+        }else{
+            if(cnt>1){
+                var elem = document.getElementById("timers_base");
+                elem.innerHTML = "<span id='timers_base' class='alert alert-warning text-center'><strong id='timers'>"+cnt+" timers - multi</strong></span>";
+            }
+        }
+        setInterval('time()',1000);
+
+
+    </script>
+        
+        
     @endif
     
     @else
