@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Task;    // 追加
 use App\Start;    // 追加
 use App\Stop;    // 追加
+use App\User;
 
 class TasksController extends Controller
 {
@@ -15,11 +16,13 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = [];
         if (\Auth::check()) {
             $user = \Auth::user();
+            $key = $request->key;
+            $ord = $request->ord;
             $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
 
             
@@ -30,7 +33,15 @@ class TasksController extends Controller
             return view('tasks.index', $data);
         }
         
-        return view('welcome', $data);
+
+        $count = User::count();
+        $taskcount = Task::count();
+        $taskmcount = Task::where('status',1)->count();
+
+        return view('welcome',['usercnt' => $count,
+                                'taskcnt' => $taskcount,
+                                'taskmcnt' => $taskmcount
+                                ]);
     }
 
     /**

@@ -85,4 +85,11 @@ class User extends Authenticatable
 
     }
     
+    public function counts()
+    {
+            $this->count();
+            
+            return $user;
+    }
+    
 }

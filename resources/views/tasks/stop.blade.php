@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <h1>{{ $task->name }}を停止する。</h1>
-
     <div class="row">
-        <div class="col-6">
+        <div class="col-sm-12">
+            <h1>{{ $task->name }}を停止する。</h1>
+
     @if (Auth::check())
             {!! Form::model($task, ['route' => ['stops.update', $task->id] , 'method' => 'put']) !!}
 
