@@ -78,7 +78,7 @@ class User extends Authenticatable
                 //$timestamp3   //加算する実行者の今回のタイマー値
                 //===========================================================
                 //$contentにタイムスタンプの情報を添加--------------------------------
-                $content = "[".date('H:i:s',$task->timer-9*60*60)."]～[".date('H:i:s',$task->timer+$timestamp3-9*60*60)."]".PHP_EOL.$content;
+                $content = "[".date('H:i:s',$task->timer-9*60*60)."]～[".date('H:i:s',$task->timer+$timestamp3-9*60*60)."]".PHP_EOL."[".date('H:i:s',$timestamp3-9*60*60)."]".PHP_EOL.$content;
                 //-----------------------------------------------------------------------
                 $task->lastcomment = $content;
                 $task->stop_at = now();
