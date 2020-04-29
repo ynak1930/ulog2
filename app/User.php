@@ -63,6 +63,7 @@ class User extends Authenticatable
                 $task = Task::find($id);
 
                 //=========時間の計算==========================================
+                $task->stop_at = now();
                 $timestamp = strtotime($task->start_at);// 1つ目の時刻
                 $timestamp2 = strtotime($task->stop_at);// 2つ目の時刻
                 
@@ -81,7 +82,6 @@ class User extends Authenticatable
                 $content = "[".date('H:i:s',$task->timer-9*60*60)."]～[".date('H:i:s',$task->timer+$timestamp3-9*60*60)."]".PHP_EOL."[".date('H:i:s',$timestamp3-9*60*60)."]".PHP_EOL.$content;
                 //-----------------------------------------------------------------------
                 $task->lastcomment = $content;
-                $task->stop_at = now();
                 $task->status = 2;    //0=新規作成 , 1=開始 , [2=停止], 3=完了
                 if ($task->timer>=2147483646)
                 {
