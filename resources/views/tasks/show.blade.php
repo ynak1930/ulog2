@@ -17,7 +17,9 @@
                 @foreach ($starts as $start)
                 <tr> 
                     <td><p>{!! nl2br(e($start->content)) !!}</p><span class="text-muted">{{ $start->created_at}}</span></td>
+                    @if (isset($stops[$loop->index]['id']))
                     <td><p>{!! nl2br(e($stops[$loop->index]['content'])) !!}</p><span class="text-muted">{!! nl2br(e($stops[$loop->index]['created_at'])) !!}</span></td>
+                    @endif
                 </tr>
                 @endforeach
 
