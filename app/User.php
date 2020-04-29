@@ -58,29 +58,42 @@ class User extends Authenticatable
     
     public function stop($id,$content)
     {
-                $this->stops()->attach($id,['content' => $content]);
-                
+
+            //================tasksテーブルの操作==============================
                 $task = Task::find($id);
 
-                $task->lastcomment = $content;
-                $task->stop_at = now();
-                $task->status = 2;    // 追加 //変更0425、0に戻してたけど2に変更
-
-                // 1つ目の時刻
-                $timestamp = strtotime($task->start_at);
-                // 2つ目の時刻
-                $timestamp2 = strtotime($task->stop_at);
+                //=========時間の計算==========================================
+                $timestamp = strtotime($task->start_at);// 1つ目の時刻
+                $timestamp2 = strtotime($task->stop_at);// 2つ目の時刻
                 
                 $timestamp3 =  $timestamp2 - $timestamp;// 2つの時刻の差を計算
                 
                 if ($timestamp3<0){
                     $timestamp3 = $timestamp3 * -1;
-                }    
+                }
                 
-                $task->timer = $task->timer + $timestamp3;//時間を加算する
 
-                $task->save();                
-
+                
+                //$task->timer  //加算前のタイマー値
+                //$timestamp3   //加算する実行者の今回のタイマー値
+                //===========================================================
+                //$contentにタイムスタンプの情報を添加--------------------------------
+                $content = "[".date('H:i:s',$task->timer-9*60*60)."]～[".date('H:i:s',$task->timer+$timestamp3-9*60*60)."]".PHP_EOL.$content;
+                //-----------------------------------------------------------------------
+                $task->lastcomment = $content;
+                $task->stop_at = now();
+                $task->status = 2;    //0=新規作成 , 1=開始 , [2=停止], 3=完了
+                if ($task->timer>=2147483646)
+                {
+                    $task->timer=2147483646;
+                }else{
+                    $task->timer = $task->timer + $timestamp3;//時間を加算する
+                }
+                $task->save();
+            //======================================================tasksテーブルの操作
+            //=======stopsテーブルへのアタッチ(content)================================
+                            $this->stops()->attach($id,['content' => $content]);
+            //========================================================stopsテーブルへのアタッチ
             return true;
 
     }

@@ -24,7 +24,6 @@
             </thead>
             <tbody>
                 @foreach ($tasks as $task)
-
                 <tr>
 
                     @if ($task->status==0)<!--new-->
@@ -80,7 +79,8 @@
 
                             @elseif ($task->status==1)
                                 <span class="badge badge-success">実行中</span>
-                                <strong id="{{$task->id}}"></strong>
+                                <span><strong id="{{$task->id}}"></strong></span>
+                                <span>[<strong id="{{$task->id}}_cur"></strong>]</span>
                             @endif
 
                     </td>
@@ -142,7 +142,7 @@
                     @endif
                         {!! Form::model($task, ['route' => ['tasks.destroy', $task->id], 'method' => 'delete']) !!}
                         <!--<i class="fas fa-trash-alt"></i>この画像を使う-->
-                        {!! Form::submit('削除', ['class' => 'mt-3 btn btn-danger']) !!}
+                        {!! Form::submit('削除', ['class' => 'mt-3 btn btn-danger', 'onclick'=> 'return confirm("このプロジェクトを削除しますか？")']) !!}
                         {!! Form::close() !!}
                     </td>
                 </tr>
@@ -189,8 +189,10 @@
         for (  var i = 0;  i < cnt;  i++  ) {
                 var now  = new Date();
                 var from = new Date(start_at[i]);
-                var ms   = new Date(now.getTime() - from.getTime()+timer[i]-60*60*9*1000);// 経過時間をミリ秒で取得
+                var ms   = new Date(now.getTime() - from.getTime()+timer[i]-60*60*9*1000);// 稼働時間＋今のタイマー
+                var ms2  = new Date(now.getTime() - from.getTime()-60*60*9*1000);// 今のタイマー
                 document.getElementById(id[i]).innerHTML = ms.toLocaleTimeString();
+                document.getElementById(id[i]+"_cur").innerHTML = ms2.toLocaleTimeString();
             }
 
         }

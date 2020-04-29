@@ -101,7 +101,9 @@ class TasksController extends Controller
             $task = Task::find($id);
             $start = Start::where('task_id',$id)->where('user_id',$user['id'])->get();
             $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->get();
-            
+
+
+
         if ($task['user_id']==$user['id']){
         return view('tasks.show', [
             'tasks' => $task,
@@ -137,7 +139,7 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id)//完了処理
     {
         
         if (\Auth::check()) {
@@ -148,7 +150,7 @@ class TasksController extends Controller
         ]);
         if ($task['user_id']==$user['id']){
         
-
+        
         $task->lastcomment = $request['content'];
         $task->status = 3;
         $task->save();
@@ -164,7 +166,7 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id)//削除する
     {
         
         if (\Auth::check()) {
@@ -181,7 +183,7 @@ class TasksController extends Controller
         return redirect('/');
     }
 
-    public function finish($id)
+    public function finish($id)//完了ページ入力
     {
         if (\Auth::check()) {
             $task_id = $id;
