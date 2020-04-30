@@ -6,7 +6,28 @@
     @if (Auth::check())
     <div>
         <h1>{{ Auth::user()->name }} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}</h1>
+                        <span>
+                            <script src="{{ asset('/js/sort.js') }}"></script>
+                            <form name="sort_form" style="display: inline">
+                            <select name="sort" onchange="dropsort()">
+                                <option value="">並べ替え</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">新規プロジェクトのみ</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">実行中プロジェクトのみ</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 8]) }}">停止中プロジェクトのみ</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 9]) }}">完了したプロジェクトのみ</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 11]) }}">作成日が新しい</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 3]) }}">停止した時間が新しい</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 5]) }}">開始した時間が新しい</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 10]) }}">作成日が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 0]) }}">稼働時間が短い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 2]) }}">停止した時間が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
+                            </select>
+                        </form>
+                        </span>
     </div>
+
 
     @if (count($tasks) > 0)
 
@@ -20,30 +41,7 @@
             <thead>
                 <tr>
                     <th class="text-center">id</th>
-                    <th class="text-left">
-                        <div>
-                        <span>プロジェクト名</span>
-                        
-                        <span>
-                            <script src="{{ asset('/js/sort.js') }}"></script>
-                            <form name="sort_form" style="display: inline">
-                            <select name="sort" onchange="dropsort()">
-                                <option value="">並べ替え</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 0]) }}">稼働時間が短い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">新規・稼働中プロジェクト</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">完了・停止中プロジェクト</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 2]) }}">停止した時間が古い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 3]) }}">停止した時間が新しい</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 5]) }}">開始した時間が新しい</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 8]) }}">作成日が古い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 9]) }}">作成日が新しい</option>
-                            </select>
-                        </form>
-                        </span>
-                        </div>
-                    </th>
+                    <th class="text-left"><span>プロジェクト名</span></th>
                     <th class="text-left" colspan=3>稼働時間</th>
                 </tr>
             </thead>
