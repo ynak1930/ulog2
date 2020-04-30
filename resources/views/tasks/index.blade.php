@@ -31,12 +31,14 @@
                                 <option value="">並べ替え</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 0]) }}">稼働時間が短い</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">よく操作するプロジェクト</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">あまり操作しないプロジェクト</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 2]) }}">停止した時間が古い</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 3]) }}">停止した時間が新しい</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 5]) }}">開始した時間が新しい</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">作成日が古い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">作成日が新しい</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 8]) }}">作成日が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 9]) }}">作成日が新しい</option>
                             </select>
                         </form>
                         </span>

@@ -40,7 +40,11 @@ class TasksController extends Controller
                     break;
                 case 5:$tasks = $user->tasks()->orderBy('start_at', 'desc')->paginate(10);//最後に開始した時間が新しい
                     break;
-                case 6:$tasks = $user->tasks()->orderBy('created_at', 'asc')->paginate(10);//作成日が古い
+                case 6:$tasks = $user->tasks()->orderBy('status', 'asc')->paginate(10);//よく稼働するプロジェクト
+                    break;
+                case 7:$tasks = $user->tasks()->orderBy('status', 'desc')->paginate(10);//あまり稼働しないプロジェクト
+                    break;
+                case 8:$tasks = $user->tasks()->orderBy('created_at', 'asc')->paginate(10);//作成日が古い
                     break;
                 default:$tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);//作成日が新しい
                     break;
