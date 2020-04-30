@@ -25,7 +25,7 @@ class TasksController extends Controller
             $user = \Auth::user();
             $key = $request->key;
             $ord = $request->ord;
-            print_r ($request->sortby);
+
             
             switch ($request->sortby) {
                 case 0:$tasks = $user->tasks()->orderBy('timer', 'asc')->paginate(10);//稼働時間が短い
