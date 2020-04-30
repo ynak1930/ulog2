@@ -51,16 +51,12 @@
 
                     @if ($task->status==0)<!--new-->
                         <td class="text-center alert alert-info">
-                            <span class="badge badge-info">新着</span>
                     @elseif ($task->status==1)<!--start(move)-->
                         <td class="alert alert-success text-center">
-                            <span class="badge badge-success">実行中</span>
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td class="alert alert-danger text-center">
-                            <span class="badge badge-warning">停止中</span>
                     @elseif ($task->status==3)<!--finish(finish)-->
                         <td class="alert alert-secondary text-center">
-                            <span class="badge badge-dark">完了</span>
                     @else
                         <td>
                     @endif
@@ -140,9 +136,14 @@
                     @endif
                         
                         @if ($task->status!=3)
+
+
+
                         {!! Form::model($task, ['route' => ['tasks.finish', $task->id], 'method' => 'put']) !!}
-                        <!--<i class="fas fa-trash-alt"></i>この画像を使う-->
-                        {!! Form::submit('完了', ['class' => 'mt-3 btn-secondary']) !!}
+                        <!--<i class="fas fa-check"></i>この画像を使う-->
+                        <button type="sumbit" class="btn btn-primary" onclick="return confirm('このプロジェクトを完了しますか？')">
+                            <i class="fas fa-check"></i>
+                        </button>
                         {!! Form::close() !!}
                         @endif
                         
@@ -163,22 +164,26 @@
                     @else
                         <td rowspan=2 >
                     @endif
+                    
                         {!! Form::model($task, ['route' => ['tasks.destroy', $task->id], 'method' => 'delete']) !!}
-                        <!--<i class="fas fa-trash-alt"></i>この画像を使う-->
-                        {!! Form::submit('削除', ['class' => 'mt-3 btn btn-danger', 'onclick'=> 'return confirm("このプロジェクトを削除しますか？")']) !!}
+                        <div class="text-center">
+                        <button type="sumbit" class="btn btn-danger" onclick="return confirm('このプロジェクトを削除しますか？')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button
+                        </div>
                         {!! Form::close() !!}
                     </td>
                 </tr>
                 <tr>
                     <td colspan=2>
                     @if ($task->status==0)<!--new-->
-                        <span class="text-muted">{{' - '.$task->created_at}}に作成</span>
+                        <span class="text-muted">{{$task->created_at}}に作成</span>
                     @elseif ($task->status==1)<!--start(move)-->
-                        <span class="text-muted">{{' - '.$task->start_at}}に開始</span>
+                        <span class="text-muted">{{$task->start_at}}に開始</span>
                     @elseif ($task->status==2)<!--stop(stop)-->
-                        <span class="text-muted">{{' - '.$task->stop_at}}に停止</span>
+                        <span class="text-muted">{{$task->stop_at}}に停止</span>
                     @elseif ($task->status==3)<!--finish(finish)-->
-                        <span class="text-muted">{{' - '.$task->stop_at}}に完了</span>
+                        <span class="text-muted">{{$task->stop_at}}に完了</span>
                     @else
                     @endif
                         
