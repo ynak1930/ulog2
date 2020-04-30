@@ -16,6 +16,8 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     
+     
     public function index(Request $request)
     {
         $data = [];
@@ -23,9 +25,28 @@ class TasksController extends Controller
             $user = \Auth::user();
             $key = $request->key;
             $ord = $request->ord;
-            $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
-
+            print_r ($request->sortby);
             
+            switch ($request->sortby) {
+                case 0:$tasks = $user->tasks()->orderBy('timer', 'asc')->paginate(10);//稼働時間が短い
+                    break;
+                case 1:$tasks = $user->tasks()->orderBy('timer', 'desc')->paginate(10);//稼働時間が長い
+                    break;
+                case 2:$tasks = $user->tasks()->orderBy('stop_at', 'asc')->paginate(10);//最後に停止した時間が古い
+                    break;
+                case 3:$tasks = $user->tasks()->orderBy('stop_at', 'desc')->paginate(10);//最後に停止した時間が新しい
+                    break;
+                case 4:$tasks = $user->tasks()->orderBy('start_at', 'asc')->paginate(10);//最後に開始した時間が古い
+                    break;
+                case 5:$tasks = $user->tasks()->orderBy('start_at', 'desc')->paginate(10);//最後に開始した時間が新しい
+                    break;
+                case 6:$tasks = $user->tasks()->orderBy('created_at', 'asc')->paginate(10);//作成日が古い
+                    break;
+                default:$tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);//作成日が新しい
+                    break;
+            }
+
+
             $data = [
                 'user' => $user,
                 'tasks' => $tasks,

@@ -9,6 +9,8 @@
     </div>
 
     @if (count($tasks) > 0)
+
+
         <div class="m-3">
             <p>
             <span id="timers_base" class="text-center"><strong id="timers"></strong></span>
@@ -18,7 +20,28 @@
             <thead>
                 <tr>
                     <th class="text-center">id</th>
-                    <th class="text-left">プロジェクト名</th>
+                    <th class="text-left">
+                        <div>
+                        <span>プロジェクト名</span>
+                        
+                        <span>
+                            <script src="{{ asset('/js/sort.js') }}"></script>
+                            <form name="sort_form" style="display: inline">
+                            <select name="sort" onchange="dropsort()">
+                                <option value="">並べ替え</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 0]) }}">稼働時間が短い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 2]) }}">停止した時間が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 3]) }}">停止した時間が新しい</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 5]) }}">開始した時間が新しい</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">作成日が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">作成日が新しい</option>
+                            </select>
+                        </form>
+                        </span>
+                        </div>
+                    </th>
                     <th class="text-left" colspan=3>稼働時間</th>
                 </tr>
             </thead>

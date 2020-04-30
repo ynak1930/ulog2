@@ -89,7 +89,10 @@ class User extends Authenticatable
                 }else{
                     $task->timer = $task->timer + $timestamp3;//時間を加算する
                 }
+
+                
                 $task->save();
+                
             //======================================================tasksテーブルの操作
             //=======stopsテーブルへのアタッチ(content)================================
                             $this->stops()->attach($id,['content' => $content]);
