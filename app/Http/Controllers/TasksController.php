@@ -171,6 +171,9 @@ class TasksController extends Controller
         ]);
         if ($task['user_id']==$user['id']){
         
+        if ($task->status==1){//タスクが動いてたら停止処理
+            \Auth::user()->stop($id,$request['content']);
+        }
         
         $task->lastcomment = $request['content'];
         $task->status = 3;
