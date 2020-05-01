@@ -39,7 +39,7 @@ class StopsController extends Controller
         if (\Auth::check()) {
 
         $this->validate($request, [
-            'content' => 'required|max:191',
+            'content' => 'required|max:151',
         ]);
 
         \Auth::user()->stop($id,$request['content']);

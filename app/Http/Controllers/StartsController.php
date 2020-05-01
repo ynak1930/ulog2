@@ -45,7 +45,7 @@ class StartsController extends Controller
         if (\Auth::check()) {
 
         $this->validate($request, [
-            'content' => 'required|max:191',
+            'content' => 'required|max:151',
         ]);
 
         \Auth::user()->start($id,$request['content']);
