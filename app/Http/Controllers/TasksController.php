@@ -134,6 +134,7 @@ class TasksController extends Controller
             $categories = $user->categories()->get();
 
 
+
             $data = [
                 'user' => $user,
                 'tasks' => $tasks,

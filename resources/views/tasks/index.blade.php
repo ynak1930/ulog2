@@ -10,6 +10,8 @@
                 {{ session('flash_message') }}
             </div>
         @endif
+        
+
     <div>
         <h1>{{ Auth::user()->name }} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}
             </h1>
@@ -104,12 +106,13 @@
                             @if ($task->category_id==0)
                                 未分類
                             @else
-                                @if (isset($categories[$task->category_id-1]['category']))
-                                {{$categories[$task->category_id-1]['category']}}
-                                @else
-                                {{$task->category_id}}
-                                表示エラー
-                                @endif
+
+                                @foreach ($categories as $category)
+                                    @if ($task->category_id==$category->id)
+                                        {{$category->category}}
+                                    @endif
+                                @endforeach
+
                             @endif
                             </div>
 
