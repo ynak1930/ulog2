@@ -99,7 +99,7 @@
                     @else<!--status==3 finish(finish)-->
                         <td class="alert alert-secondary text-center">
                     @endif
-                            <strong>{{ $task->name }}</strong>
+                            <strong style="word-break: break-all;">{{ $task->name }}</strong>
                             <div>
                             @if ($task->category_id==0)
                                 未分類
@@ -187,7 +187,7 @@
                         
                     </td>
                     
-                    <td colspan=2>
+                    <td colspan=2 style="word-break: break-all;">
                          {!! nl2br(e($task->lastcomment)) !!}
                     </td>
 
