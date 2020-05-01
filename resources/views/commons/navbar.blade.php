@@ -11,10 +11,13 @@
             <ul class="navbar-nav">
                 @if (Auth::check())
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->name }}</a>
+                        <i class="nav-link dropdown-toggle text-right" data-toggle="dropdown">{{ Auth::user()->name }}</i>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li class="dropdown-item">{!! link_to_route('tasks.create', '新規プロジェクトの投稿') !!}</li>
                             <li class="dropdown-item">{!! link_to_route('tasks.index', 'プロジェクトの一覧') !!}</li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item">{!! link_to_route('categories.create', 'カテゴリーを追加') !!}</li>
+                            <li class="dropdown-item">{!! link_to_route('categories.edit', 'カテゴリーを削除') !!}</li>
                             <li class="dropdown-divider"></li>
                             <li class="dropdown-item">{!! link_to_route('logout.get', 'Logout') !!}</li>
                         </ul>
@@ -27,3 +30,4 @@
         </div>
     </nav>
 </header>
+

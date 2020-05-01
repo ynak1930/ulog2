@@ -13,6 +13,18 @@
 
                         {!! Form::label('name', 'プロジェクト名:') !!}
                         {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                        
+                        <p class="mt-4">
+                        {!! Form::label('category', 'カテゴリー:') !!}
+                        <select name="category">
+                                <option value="0">未分類</option>
+                        @if (count($categories) > 0)
+                           @foreach ($categories as $category)
+                               <option value="{{$category->id}}">{{$category->category}}</option>
+                            @endforeach
+                        @endif
+                            </select></p>
+
 
                 {!! Form::submit('追加する', ['class' => 'btn btn-primary']) !!}
                 </div>

@@ -4,9 +4,16 @@
 
 
     @if (Auth::check())
+        <!-- フラッシュメッセージ -->
+        @if (session('flash_message'))
+            <div class="flash_message">
+                {{ session('flash_message') }}
+            </div>
+        @endif
     <div>
-        <h1>{{ Auth::user()->name }} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}</h1>
-                        <span>
+        <h1>{{ Auth::user()->name }} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}
+            </h1>
+                        <span class="mr-4">
                             <script src="{{ asset('/js/sort.js') }}"></script>
                             <form name="sort_form" style="display: inline">
                             <select name="sort" onchange="dropsort()">
@@ -25,7 +32,26 @@
                                 <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
                             </select>
                         </form>
+                        のみ表示
                         </span>
+                        
+                        <span>
+                            <script src="{{ asset('/js/sort2.js') }}"></script>
+                            <form name="sort_form2" style="display: inline">
+                            <select name="sort2" onchange="dropsort2()">
+                                <option value="">カテゴリー</option>
+                                <option value="{{ route('tasks.index', ['categories' => 0]) }}">すべて</option>
+                        @if (count($categories) > 0)
+                           @foreach ($categories as $category)
+                               <option value="{{ route('tasks.index', ['categories' => $category->id]) }}">{{$category->category}}</option>
+                                
+                            @endforeach
+                        @endif
+                            </select>
+                        </form>
+                        のみ表示
+                        </span>
+                        
     </div>
 
 
@@ -74,6 +100,18 @@
                         <td class="alert alert-secondary text-center">
                     @endif
                             <strong>{{ $task->name }}</strong>
+                            <div>
+                            @if ($task->category_id==0)
+                                未分類
+                            @else
+                                @if (isset($categories[$task->category_id-1]['category']))
+                                {{$categories[$task->category_id-1]['category']}}
+                                @else
+                                {{$task->category_id}}
+                                表示エラー
+                                @endif
+                            @endif
+                            </div>
 
                     </td>
                     @if ($task->status==0)<!--new-->

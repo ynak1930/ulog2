@@ -29,13 +29,17 @@ Route::get('/', 'TasksController@index');
 
 Route::group(['middleware' => 'auth'], function () {
 
+Route::resource('categories', 'CategoriesController',['only' => ['create','store']]);
+Route::get('categories/edit', 'CategoriesController@edit')->name('categories.edit');
+Route::delete('categories/destroy', 'CategoriesController@destroy')->name('categories.destroy');
 
-Route::resource('tasks', 'TasksController');
+Route::resource('tasks', 'TasksController',['only' => ['index','show','update','create','store', 'destroy']]);
+Route::put('tasks/{id}/edit', 'TasksController@edit')->name('tasks.edit');
 Route::put('tasks/{id}/finish', 'TasksController@finish')->name('tasks.finish');
 
 
-Route::resource('starts', 'StartsController');
-Route::resource('stops', 'StopsController');
+Route::resource('starts', 'StartsController',['only' => ['update']]);
+Route::resource('stops', 'StopsController',['only' => ['update']]);
 Route::get('tasks/{id}/start', 'StartsController@create')->name('starts.create');
 Route::get('tasks/{id}/stop', 'StopsController@create')->name('stops.create');
 });
