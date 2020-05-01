@@ -13,6 +13,7 @@
                 @else
                 未分類
                 @endif
+                </h2>
                 <p class="mt-4">
                 {!! Form::model($tasks, ['route' => ['tasks.edit', $tasks->id] , 'method' => 'put']) !!}
                 {!! Form::label('category', 'カテゴリー:') !!}
@@ -27,8 +28,6 @@
                 {!! Form::submit('変更', ['class' => 'btn btn-dark']) !!}
                 {!! Form::close() !!}
                 </p>
-
-                </h2>
         </span>
 
         @if (count($starts) > 0)
