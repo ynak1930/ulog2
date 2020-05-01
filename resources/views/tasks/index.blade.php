@@ -49,7 +49,7 @@
                         @endif
                             </select>
                         </form>
-                        のみ表示
+                        を表示
                         </span>
                         
     </div>
