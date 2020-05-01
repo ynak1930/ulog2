@@ -14,7 +14,7 @@ class AddCategoryIdToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->integer('category_id');
+            $table->integer('category_id')->default(0);
         });
     }
 
