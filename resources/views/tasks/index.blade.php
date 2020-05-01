@@ -32,7 +32,7 @@
                                 <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
                             </select>
                         </form>
-                        のみ表示
+                        
                         </span>
                         
                         <span>
