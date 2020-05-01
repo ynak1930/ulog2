@@ -15,8 +15,8 @@
                 @endif
                 <p class="mt-4">
                 {!! Form::model($tasks, ['route' => ['tasks.edit', $tasks->id] , 'method' => 'put']) !!}
-                {!! Form::label('category', '変更:') !!}
-                <select name="category">
+                {!! Form::label('category', 'カテゴリー:') !!}
+                <select name="category" style="width:100%;">
                 <option value="0">未分類</option>
                 @if (count($categories) > 0)
                 @foreach ($categories as $category)
@@ -30,29 +30,29 @@
 
                 </h2>
         </span>
-    </div>
-    <div class="mt-4 row">
+
         @if (count($starts) > 0)
-        <div class="col-sm-12">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>開始コメント</th><th>停止コメント</th>
-                </tr>
-            </thead>
+
+        <table class="table table-striped m-4" style="width:100%">
             <tbody>
                 @foreach ($starts as $start)
-                <tr> 
-                    <td><p>{!! nl2br(e($start->content)) !!}</p><span class="text-muted">{{ $start->created_at}}</span></td>
+                <tr class="row"> 
+                    <td class="col-sm-6" style="word-break: break-all;">
+                        <p>{!! nl2br(e($start->content)) !!}</p>
+                        <span class="text-muted">{{ $start->created_at}}に開始</span>
+                    </td>
                     @if (isset($stops[$loop->index]['id']))
-                    <td><p>{!! nl2br(e($stops[$loop->index]['content'])) !!}</p><span class="text-muted">{!! nl2br(e($stops[$loop->index]['created_at'])) !!}</span></td>
+                    <td class="col-sm-6" style="word-break: break-all;">
+                        <p>{!! nl2br(e($stops[$loop->index]['content'])) !!}</p>
+                        <span class="text-muted">{{($stops[$loop->index]['created_at'])}}に停止</span>
+                    </td>
                     @endif
                 </tr>
                 @endforeach
 
             </tbody>
         </table>
-        </div>
+
         @endif
     </div>
     @endif
