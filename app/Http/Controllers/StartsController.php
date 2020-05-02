@@ -31,6 +31,9 @@ class StartsController extends Controller
                         'task' => $task,
                     ]);
 //                }
+            }else{
+            $message = 'Not Found';
+             return redirect('/')->with('flash_message', $message);
             }
         }
     return redirect('/');
