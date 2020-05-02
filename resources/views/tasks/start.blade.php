@@ -11,7 +11,7 @@
 
                 <div class="form-group">
                     {!! Form::label('content', 'コメント:') !!}
-                    {!! Form::textarea('content', null, ['class' => 'form-control','maxlength'=>'151']) !!}
+                    {!! Form::textarea('content', null, ['class' => 'form-control','maxlength'=>'626']) !!}
                 </div>
                 
                 {!! Form::submit('START', ['class' => 'btn btn-primary']) !!}

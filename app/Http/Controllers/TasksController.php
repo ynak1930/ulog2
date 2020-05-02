@@ -216,13 +216,18 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-    
+        $message = '';
         if (\Auth::check()) {
             $user = \Auth::user();
             $task = Task::find($id);
+            if($task){
             $start = Start::where('task_id',$id)->where('user_id',$user['id'])->get();
             $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->get();
             $categories = $user->categories()->get();
+            }else{
+            $message = 'Not Found';
+             return redirect('/')->with('flash_message', $message);
+            }
 
 
         if ($task['user_id']==$user['id']){
@@ -279,6 +284,11 @@ class TasksController extends Controller
     public function update(Request $request, $id)//完了処理
     {
         $message = '';
+        if ($request->content){
+            
+        }else{
+            return redirect('/');
+        }
         if (\Auth::check()) {
             $user = \Auth::user();
             $task = Task::find($id);
