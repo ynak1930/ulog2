@@ -13,7 +13,8 @@
 
                         {!! Form::label('name', 'プロジェクト名:') !!}
                         {!! Form::text('name', null, ['class' => 'form-control']) !!}
-                        
+                        {!! Form::label('timer', 'タイマー初期値(秒):')!!}
+                        {!! Form::number('timer', null, ['class' => 'form-control', 'min' => 0, 'max' => 2000000000]) !!}
                         <p class="mt-4">
                         {!! Form::label('category', 'カテゴリー:') !!}
                         <select name="category">

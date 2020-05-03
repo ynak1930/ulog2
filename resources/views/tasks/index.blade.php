@@ -135,8 +135,8 @@
                         
                             @if ($task->status!=1)
                             <!--タイムゾーンの設定で9時間足されちゃうので9時間マイナス・他にいい方法が無いか探す-->
-                            {{ date('H:i:s',$task->timer-60*60*9) }}
-
+                            {{sprintf('%02d', floor( $task->timer / 3600 ))}}:{{sprintf('%02d',floor( ( $task->timer / 60 ) % 60 ))}}:{{sprintf('%02d',$task->timer % 60)}}
+                            ({{floor($task->timer / 3600/24)}}日)
                             @elseif ($task->status==1)
                                 <span class="badge badge-success">実行中</span>
                                 <span><strong id="{{$task->id}}"></strong></span>
@@ -234,9 +234,7 @@
             </tbody>
         </table>
 
-
         {{ $tasks->links() }}
-        
         <script type="text/javascript">
         var start_at = new Array();
         var timer = new Array();
@@ -258,10 +256,9 @@
         for (  var i = 0;  i < cnt;  i++  ) {
                 var now  = new Date();
                 var from = new Date(start_at[i]);
-                var ms   = new Date(now.getTime() - from.getTime()+timer[i]-60*60*9*1000);// 稼働時間＋今のタイマー
-                var ms2  = new Date(now.getTime() - from.getTime()-60*60*9*1000);// 今のタイマー
-                document.getElementById(id[i]).innerHTML = ms.toLocaleTimeString();
-                document.getElementById(id[i]+"_cur").innerHTML = ms2.toLocaleTimeString();
+
+                document.getElementById(id[i]).innerHTML = mytime(now.getTime() - from.getTime()+timer[i]);
+                document.getElementById(id[i]+"_cur").innerHTML = mytime(now.getTime() - from.getTime());
             }
 
         }
@@ -276,6 +273,34 @@
             }
         }
         setInterval('time()',1000);
+
+
+function mytime(timer) {
+
+    timer = timer/1000;
+
+    var day =0;
+    var hou =0;
+    var min =0;
+    var sec =0;
+    
+    var timetext = '';
+
+    day = Math.floor(timer/3600/24);
+    hou = Math.floor(timer/3600);
+    min = Math.floor((timer/60)%60);
+    sec = Math.floor(timer % 60);
+    var tmp = "00" + String( sec );
+    sec = tmp.substr(tmp.length - 2);
+
+    if(day>0){
+        timetext = day+"日 "+hou+":"+min+":"+sec;
+    }else{
+        timetext = hou+":"+min+":"+sec;
+    }
+    
+    return timetext;
+}
 
 
     </script>

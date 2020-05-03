@@ -165,7 +165,7 @@ class TasksController extends Controller
         $user = \Auth::user();
         $task = new Task;
         $categories = $user->categories()->orderBy('created_at', 'desc')->get();
-        
+
         return view('tasks.create', [
             'task' => $task,
             'categories' => $categories,
@@ -185,7 +185,14 @@ class TasksController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:191',
+            'timer' => 'nullable|integer|min:0|max:2147483646',
         ]);
+
+        if ($request->timer){
+            $timer = $request->timer;
+        }else{
+            $timer = 0;
+        }
 
         $message = '';
             $cur_cat = $request->category;
@@ -193,7 +200,7 @@ class TasksController extends Controller
         $user = \Auth::user();
         $request->user()->tasks()->create([
         'name' => $request->name,
-        'timer' => 0,
+        'timer' => $timer,
         'status' => 0,
         'start_at'=>now(),
         'stop_at'=>now(),
