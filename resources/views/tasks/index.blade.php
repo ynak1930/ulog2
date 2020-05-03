@@ -136,7 +136,9 @@
                             @if ($task->status!=1)
                             <!--タイムゾーンの設定で9時間足されちゃうので9時間マイナス・他にいい方法が無いか探す-->
                             {{sprintf('%02d', floor( $task->timer / 3600 ))}}:{{sprintf('%02d',floor( ( $task->timer / 60 ) % 60 ))}}:{{sprintf('%02d',$task->timer % 60)}}
+                            @if (floor($task->timer / 3600/24)>0)
                             ({{floor($task->timer / 3600/24)}}日)
+                            @endif
                             @elseif ($task->status==1)
                                 <span class="badge badge-success">実行中</span>
                                 <span><strong id="{{$task->id}}"></strong></span>
