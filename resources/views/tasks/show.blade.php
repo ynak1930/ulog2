@@ -5,6 +5,19 @@
     <div class="mt-4 row">
         <span class="col-sm-6">
                 <h1>({{ $tasks->id }}){{$tasks->name}}</h1>
+                            @if ($tasks->status!=1)
+                            <!--タイムゾーンの設定で9時間足されちゃうので9時間マイナス・他にいい方法が無いか探す-->
+                            {{sprintf('%02d', floor( $tasks->timer / 3600 ))}}:{{sprintf('%02d',floor( ( $tasks->timer / 60 ) % 60 ))}}:{{sprintf('%02d',$tasks->timer % 60)}}
+                            @if (floor($tasks->timer / 3600/24)>0)
+                            ({{floor($tasks->timer / 3600/24)}}日)
+                            @endif
+                            @elseif ($tasks->status==1)
+                            <span id="timer_back">
+                                <p class="m-4"><span class="badge badge-success">実行中</span></p>
+                                <p class="m-4"><span class="alert alert-success"><strong id="timer1"></strong></span></p>
+                                <p class="m-4"><span class="alert alert-success">[<strong id="timer2"></strong>]</span></p>
+                            </span>
+                            @endif
         </span>
         <span class="col-sm-6">
                 <h2>
@@ -29,6 +42,18 @@
                 {!! Form::close() !!}
                 </p>
         </span>
+        <span class="col-sm-6">
+                {!! Form::model($tasks, ['route' => ['tasks.edit', $tasks->id] , 'method' => 'put']) !!}
+                <p>タイマー値変更<br>
+                <input type="number" name="hour" value="0" min="0" max="33333333" size="8" maxlength="8">
+                :
+                <input type="number" name="minute" value="0" min="0" max="59" size="2" maxlength="2">
+                :
+                <input type="number" name="second" value="0" min="0" max="59" size="2" maxlength="2">
+                </p>
+                {!! Form::submit('変更', ['class' => 'btn btn-dark']) !!}
+                {!! Form::close() !!}
+        </span>
 
         @if (count($starts) > 0)
 
@@ -51,7 +76,63 @@
 
             </tbody>
         </table>
+@if ($tasks->status==1)
+        <script type="text/javascript">
+        var start_at = 0;
+        var mytimer = 0;
+        var id = 0;
+        var cnt = 0;
+        
 
+                start_at = "<?php echo htmlspecialchars($tasks->start_at, ENT_QUOTES, 'UTF-8');?>";
+                mytimer    = "<?php echo htmlspecialchars($tasks->timer, ENT_QUOTES, 'UTF-8');?>";
+                mytimer = mytimer * 1000;
+                id    = "<?php echo htmlspecialchars($tasks->id, ENT_QUOTES, 'UTF-8');?>";
+            
+
+        function time(){
+        
+                 var now  = new Date();
+                var from = new Date(start_at);
+
+                document.getElementById('timer1').innerHTML = mytime(now.getTime() - from.getTime()+mytimer);
+                document.getElementById('timer2').innerHTML = mytime(now.getTime() - from.getTime());
+
+        }
+
+        setInterval('time()',1000);
+
+
+function mytime(timer) {
+
+    timer = timer/1000;
+
+    var day =0;
+    var hou =0;
+    var min =0;
+    var sec =0;
+    
+    var timetext = '';
+
+    day = Math.floor(timer/3600/24);
+    hou = Math.floor(timer/3600);
+    min = Math.floor((timer/60)%60);
+    sec = Math.floor(timer % 60);
+    var tmp = "00" + String( sec );
+    sec = tmp.substr(tmp.length - 2);
+
+    if(day>0){
+        timetext = day+"日 "+hou+":"+min+":"+sec;
+    }else{
+        timetext = hou+":"+min+":"+sec;
+    }
+    
+    return timetext;
+}
+
+
+    </script>
+@endif
         @endif
     </div>
     @endif

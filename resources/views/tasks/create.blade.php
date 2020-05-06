@@ -13,8 +13,16 @@
 
                         {!! Form::label('name', 'プロジェクト名:') !!}
                         {!! Form::text('name', null, ['class' => 'form-control']) !!}
-                        {!! Form::label('timer', 'タイマー初期値(秒):')!!}
-                        {!! Form::number('timer', null, ['class' => 'form-control', 'min' => 0, 'max' => 2000000000]) !!}
+                        <!--{!! Form::label('timer', 'タイマー初期値(秒):')!!}-->
+                        <!--{!! Form::number('timer', null, ['class' => 'form-control', 'min' => 0, 'max' => 2000000000]) !!}-->
+                        
+                        <p>タイマー初期値<br>
+                        <input type="number" name="hour" value="0" min="0" max="33333333" size="8" maxlength="8">
+                        :
+                        <input type="number" name="minute" value="0" min="0" max="59" size="2" maxlength="2">
+                        :
+                        <input type="number" name="second" value="0" min="0" max="59" size="2" maxlength="2">
+                        </p>
                         <p class="mt-4">
                         {!! Form::label('category', 'カテゴリー:') !!}
                         <select name="category">

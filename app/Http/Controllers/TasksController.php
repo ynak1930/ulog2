@@ -185,14 +185,43 @@ class TasksController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:191',
-            'timer' => 'nullable|integer|min:0|max:2147483646',
+            //'timer' => 'nullable|integer|min:0|max:2147483646',
+            'hour' => 'nullable|integer|min:0|max:33333333',
+            'minute' => 'nullable|integer|min:0|max:59',
+            'second' => 'nullable|integer|min:0|max:59'
         ]);
 
-        if ($request->timer){
+        $timer = 0;
+
+        if ($request->hour){
+            if ($request->hour>0){
+                if ($request->hour<33333333){
+                    $timer = $request->hour*3600;
+                }
+            }
+        }
+
+        if ($request->minute){
+            if ($request->minute>0){
+                if ($request->minute<60){
+                    $timer = $timer + $request->minute*60;
+                }
+            }
+        }
+
+        if ($request->second){
+            if ($request->second>0){
+                if ($request->second<60){
+                    $timer = $timer + $request->second;
+                }
+            }
+        }
+
+        /*if ($request->timer){
             $timer = $request->timer;
         }else{
             $timer = 0;
-        }
+        }*/
 
         $message = '';
             $cur_cat = $request->category;
@@ -224,6 +253,7 @@ class TasksController extends Controller
     public function show($id)
     {
         $message = '';
+
         if (\Auth::check()) {
             $user = \Auth::user();
             $task = Task::find($id);
@@ -268,11 +298,50 @@ class TasksController extends Controller
             $user = \Auth::user();
             $task = Task::find($id);
 
+        $this->validate($request, [
+            'category' => 'nullable|integer',
+            'hour' => 'nullable|integer|min:0|max:33333333',
+            'minute' => 'nullable|integer|min:0|max:59',
+            'second' => 'nullable|integer|min:0|max:59',
+        ]);
+
         if ($task['user_id']==$user['id']){
 
-        $task->category_id = $request['category'];
-        $task->save();
-        $message = 'カテゴリーを変更しました。';
+            if ($request['category']!=null){
+                $task->category_id = $request['category'];
+                $task->save();
+                $message = 'カテゴリーを変更しました。'.PHP_EOL;
+            }else{
+
+                $timer = 0;
+
+                if ($request->hour){
+                    if ($request->hour>0){
+                        if ($request->hour<33333333){
+                            $timer = $request->hour*3600;
+                        }
+                    }
+                }
+
+                if ($request->minute){
+                    if ($request->minute>0){
+                        if ($request->minute<60){
+                            $timer = $timer + $request->minute*60;
+                        }
+                    }
+                }
+
+                if ($request->second){
+                    if ($request->second>0){
+                        if ($request->second<60){
+                            $timer = $timer + $request->second;
+                        }
+                    }
+                }
+                $task->timer = $timer;
+                $task->save();
+                $message = $message.'タイマー値を変更しました。';
+            }
         }
     }else{
         $message = '失敗しました。';
