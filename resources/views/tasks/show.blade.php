@@ -6,7 +6,6 @@
         <span class="col-sm-6">
                 <h1>({{ $tasks->id }}){{$tasks->name}}</h1>
                             @if ($tasks->status!=1)
-                            <!--タイムゾーンの設定で9時間足されちゃうので9時間マイナス・他にいい方法が無いか探す-->
                             {{sprintf('%02d', floor( $tasks->timer / 3600 ))}}:{{sprintf('%02d',floor( ( $tasks->timer / 60 ) % 60 ))}}:{{sprintf('%02d',$tasks->timer % 60)}}
                             @if (floor($tasks->timer / 3600/24)>0)
                             ({{floor($tasks->timer / 3600/24)}}日)

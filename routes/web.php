@@ -37,7 +37,6 @@ Route::resource('tasks', 'TasksController',['only' => ['index','show','update','
 Route::put('tasks/{id}/edit', 'TasksController@edit')->name('tasks.edit');
 Route::put('tasks/{id}/finish', 'TasksController@finish')->name('tasks.finish');
 
-
 Route::resource('starts', 'StartsController',['only' => ['update']]);
 Route::resource('stops', 'StopsController',['only' => ['update']]);
 Route::get('tasks/{id}/start', 'StartsController@create')->name('starts.create');

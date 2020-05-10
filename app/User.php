@@ -79,13 +79,27 @@ class User extends Authenticatable
                     $timestamp3 = $timestamp3 * -1;
                 }
                 
+                $hour_from = sprintf('%02d', floor( $task->timer / 3600 ));//hour
+                $min_from = sprintf('%02d',floor( ( $task->timer / 60 ) % 60 ));//minute
+                $sec_from = sprintf('%02d',$task->timer % 60);//second
 
+                $hour = sprintf('%02d', floor( $timestamp3 / 3600 ));//hour
+                $min = sprintf('%02d',floor( ( $timestamp3 / 60 ) % 60 ));//minute
+                $sec = sprintf('%02d',($timestamp3 % 60));//second
+                
+                $hour_to = sprintf('%02d', floor( ($task->timer+$timestamp3) / 3600 ));//hour
+                $min_to = sprintf('%02d',floor( ( ($task->timer+$timestamp3) / 60 ) % 60 ));//minute
+                $sec_to = sprintf('%02d',($task->timer+$timestamp3) % 60);//second
+
+                if (floor($task->timer / 3600/24)>0){
+                            $day = floor($task->timer / 3600/24);//day
+                }
                 
                 //$task->timer  //加算前のタイマー値
                 //$timestamp3   //加算する実行者の今回のタイマー値
                 //===========================================================
                 //$contentにタイムスタンプの情報を添加--------------------------------
-                $content = "[".date('H:i:s',$task->timer-9*60*60)."]～[".date('H:i:s',$task->timer+$timestamp3-9*60*60)."]".PHP_EOL."[".date('H:i:s',$timestamp3-9*60*60)."]".PHP_EOL.$content;
+                $content = "[".$hour_from.":".$min_from.":".$sec_from."]～[".$hour_to.":".$min_to.":".$sec_to."]".PHP_EOL."[".$hour.":".$min.":".$sec."]".PHP_EOL.$content;
                 //-----------------------------------------------------------------------
                 $task->lastcomment = $content;
                 $task->status = 2;    //0=新規作成 , 1=開始 , [2=停止], 3=完了
@@ -100,6 +114,8 @@ class User extends Authenticatable
                 $task->save();
                 
             //======================================================tasksテーブルの操作
+            
+            
             //=======stopsテーブルへのアタッチ(content)================================
                             $this->stops()->attach($id,['content' => $content]);
             //========================================================stopsテーブルへのアタッチ

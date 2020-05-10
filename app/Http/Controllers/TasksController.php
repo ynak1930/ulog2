@@ -258,8 +258,8 @@ class TasksController extends Controller
             $user = \Auth::user();
             $task = Task::find($id);
             if($task){
-            $start = Start::where('task_id',$id)->where('user_id',$user['id'])->get();
-            $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->get();
+            $start = Start::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+            $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
             $categories = $user->categories()->get();
             }else{
             $message = 'Not Found';
