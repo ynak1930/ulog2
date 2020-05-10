@@ -2,6 +2,11 @@
 
 @section('content')
     @if (Auth::check())
+            @if (session('flash_message'))
+            <div class="flash_message">
+                {{ session('flash_message') }}
+            </div>
+        @endif
     <div class="mt-4 row">
         <span class="col-sm-6">
                 <h1>({{ $tasks->id }}){{$tasks->name}}</h1>
@@ -53,7 +58,20 @@
                 {!! Form::submit('変更', ['class' => 'btn btn-dark']) !!}
                 {!! Form::close() !!}
         </span>
-
+                        <span class="mr-4">
+                            <script src="{{ asset('/js/sort.js') }}"></script>
+                            <form name="sort_form" style="display: inline">
+                            <select name="sort" onchange="dropsort()">
+                                <option value="">並べ替え</option>
+                                <option value="{{ route('tasks.show', ['id' => $tasks->id, 'sort' => 1]) }}">新しい順</option>
+                                <option value="{{ route('tasks.show', ['id' => $tasks->id, 'sort' => 2]) }}">古い順</option>
+                                <option value="{{ route('tasks.show', ['id' => $tasks->id, 'sort' => 3]) }}">今日のみ</option>
+                                <option value="{{ route('tasks.show', ['id' => $tasks->id, 'sort' => 4]) }}">今週のみ</option>
+                                <option value="{{ route('tasks.show', ['id' => $tasks->id, 'sort' => 5]) }}">今月のみ</option>
+                            </select>
+                        </form>
+                        
+                        </span>
         @if (count($starts) > 0)
 
         <table class="table table-striped m-4" style="width:100%">

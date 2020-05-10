@@ -250,16 +250,61 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $message = '';
+        $sort = $request->sort;
 
         if (\Auth::check()) {
             $user = \Auth::user();
             $task = Task::find($id);
             if($task){
-            $start = Start::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
-            $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+                
+            if ($sort){
+                switch ($sort) {
+                    case 1://新しい順
+                        $start = Start::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+                        $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+                    break;
+                    case 2://古い順
+                        $start = Start::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'asc')->get();
+                        $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'asc')->get();
+
+                    break;
+                    case 3://今日のみ
+                        $now = date('Y-m-d');
+
+                        $start = Start::where('task_id',$id)->where('user_id',$user['id'])->whereDate('created_at', '=', $now)->get();
+                        $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->whereDate('created_at', '=', $now)->get();
+                    break;
+                    case 4://今週のみ
+                    $day7 = date("Y-m-d",strtotime("-7 day"));
+
+                        $now = date('Y-m-');
+
+                        $start = Start::where('task_id',$id)->where('user_id',$user['id'])->whereDate('created_at', '>=', $day7)->get();
+                        $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->whereDate('created_at', '>=', $day7)->get();
+
+                    break;
+                    case 5://今月のみ
+                        $year = date('Y');
+                        $month = date('m');
+
+
+                        $start = Start::where('task_id',$id)->where('user_id',$user['id'])->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get();
+                        $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get();
+                    break;
+                    default:
+                        $start = Start::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+                        $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+                    break;
+                }
+            }else{
+                $start = Start::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+                $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->orderBy('created_at', 'desc')->get();
+            }
+
+        
             $categories = $user->categories()->get();
             }else{
             $message = 'Not Found';
@@ -267,17 +312,19 @@ class TasksController extends Controller
             }
 
 
+
         if ($task['user_id']==$user['id']){
+
         return view('tasks.show', [
             'tasks' => $task,
             'starts' => $start,
             'stops' => $stop,
             'categories' => $categories,
-        ]);
+        ])->with('flash_message', $message);
         }
 
         }
-    
+
 
 
         return redirect('/');
