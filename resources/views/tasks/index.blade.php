@@ -21,7 +21,7 @@
                             <form name="sort_form" style="display: inline">
                             <select name="sort" onchange="dropsort()">
                                 <option value="">フィルタ/並び替え</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 12]) }}">すべてを表示</option>  
+                                <option value="{{ route('tasks.index', ['sortby' => 13]) }}">すべてを表示</option>  
                                 <option value="{{ route('tasks.index', ['sortby' => 6]) }}">新規プロジェクトのみ表示</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 7]) }}">実行中プロジェクトのみ表示</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 12]) }}">中断したプロジェクトのみ表示</option>    
