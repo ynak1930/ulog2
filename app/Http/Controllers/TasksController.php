@@ -31,107 +31,54 @@ class TasksController extends Controller
             $category_flg = FALSE;
             
 
-            if ($cur_category>0){
-                $category = Category::find($cur_category);
-                if ($category){
-                if ($category->user_id == $user->id){
-                    $category_flg = TRUE;
-                }
-                }
-            }else{
-                $category_flg = FALSE;
-            }
-            
+
             switch ($request->sortby) {
                 case 0:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('timer', 'asc')->get();
-                    }else{
+
                     $tasks = $user->tasks()->orderBy('timer', 'asc')->get();//稼働時間が短い
-                    }
                     break;
                 case 1:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('timer', 'desc')->get();//稼働時間が長い
-                    }else{
                     $tasks = $user->tasks()->orderBy('timer', 'desc')->get();//稼働時間が長い
-                    }
                     break;
                 case 2:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('stop_at', 'asc')->get();//最後に停止した時間が古い
-                    }else{
                     $tasks = $user->tasks()->orderBy('stop_at', 'asc')->get();//最後に停止した時間が古い
-                    }
                     break;
                 case 3:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('stop_at', 'desc')->get();//最後に停止した時間が新しい
-                    }else{
                     $tasks = $user->tasks()->orderBy('stop_at', 'desc')->get();//最後に停止した時間が新しい
-                    }
                     break;
                 case 4:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('start_at', 'asc')->get();//最後に開始した時間が古い
-                    }else{
                     $tasks = $user->tasks()->orderBy('start_at', 'asc')->get();//最後に開始した時間が古い
-                    }
                     break;
                 case 5:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('start_at', 'desc')->get();//最後に開始した時間が新しい
-                    }else{
                     $tasks = $user->tasks()->orderBy('start_at', 'desc')->get();//最後に開始した時間が新しい
-                    }
                     break;
                 case 6:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->where('status',0)->orderBy('created_at', 'desc')->get();//新規プロジェクト
-                    }else{
                     $tasks = $user->tasks()->where('status',0)->orderBy('created_at', 'desc')->get();//新規プロジェクト
-                    }
                     break;
                 case 7:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->where('status',1)->orderBy('created_at', 'desc')->get();//実行中プロジェクト
-                    }else{
                     $tasks = $user->tasks()->where('status',1)->orderBy('created_at', 'desc')->get();//実行中プロジェクト
-                    }
                     break;
                 case 8:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->where('status',2)->orderBy('created_at', 'desc')->get();//停止中プロジェクト
-                    }else{
                     $tasks = $user->tasks()->where('status',2)->orderBy('created_at', 'desc')->get();//停止中プロジェクト
-                    }
                     break;
                 case 9:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->where('status',3)->orderBy('created_at', 'desc')->get();//完了したプロジェクト
-                    }else{
-                    $tasks = $user->tasks()->where('status',3)->orderBy('created_at', 'desc')->get();//完了したプロジェクト
-                    }
+                    $tasks = $user->tasks()->where('status',4)->orderBy('created_at', 'desc')->get();//完了したプロジェクト
                     break;
                 case 10:
-                     if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('created_at', 'asc')->get();//作成日が古い
-                    }else{
                     $tasks = $user->tasks()->orderBy('created_at', 'asc')->get();//作成日が古い
-                    }
                     break;
-                default:
-                    if ($category_flg){
-                    $tasks = $user->tasks()->where('category_id',$cur_category)->orderBy('created_at', 'desc')->get();//作成日が新しい
-                    }else{
+                case 11:
                     $tasks = $user->tasks()->orderBy('created_at', 'desc')->get();//作成日が新しい
-                    }
+                    break;
+                
+                default:
+                    $tasks = $user->tasks()->where('status',3)->orderBy('created_at', 'desc')->get();//中断中プロジェクト
                     break;
             }
 
 
 
-            $categories = $user->categories()->get();
+            $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
 
 
 

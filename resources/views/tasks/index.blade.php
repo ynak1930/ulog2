@@ -13,17 +13,19 @@
         
 
     <div>
-        <h1>{{ Auth::user()->name }} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}
-            </h1>
-                        <span class="mr-4">
+        <h1 class="m-4">
+            {{ Auth::user()->name }} - {!! link_to_route('categories.create', 'カテゴリを追加', [], ['class' => 'btn btn-primary']) !!} - {!! link_to_route('tasks.create', '新規プロジェクトの投稿', [], ['class' => 'btn btn-primary']) !!}
+        </h1>
+                        <span class="mt-6">
                             <script src="{{ asset('/js/sort.js') }}"></script>
                             <form name="sort_form" style="display: inline">
                             <select name="sort" onchange="dropsort()">
-                                <option value="">並べ替え</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">新規プロジェクトのみ</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">実行中プロジェクトのみ</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 8]) }}">停止中プロジェクトのみ</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 9]) }}">完了したプロジェクトのみ</option>
+                                <option value="">フィルタ/並べ替え</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 6]) }}">新規プロジェクトのみ表示</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 7]) }}">実行中プロジェクトのみ表示</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 12]) }}">中断したプロジェクトのみ表示</option>    
+                                <option value="{{ route('tasks.index', ['sortby' => 8]) }}">停止中プロジェクトのみ表示</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 9]) }}">完了したプロジェクトのみ表示</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 11]) }}">作成日が新しい</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 3]) }}">停止した時間が新しい</option>
@@ -40,52 +42,7 @@
     </div>
     @if (count($categories) > 0)
     
-<div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="card">
-    <div class="card-header" role="tab" id="headingOne">
-      <h5 class="mb-0">
-        <a class="text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapseOne" role="button" aria-expanded="true" aria-controls="collapseOne">
-            <div class="row">
-            @php
-                $timers = 0;
-                $taskcnt = 0;
-            @endphp
-            @foreach ($tasks as $task)
-                @if ($task->category_id==0)
-                    @php
-                    $taskcnt = $taskcnt+1;
-                    @endphp
-                    @if ($task->status==1)
-                        @php
-                            $timers = $timers+1;
-                        @endphp
-                    @endif
-                @endif
-            @endforeach
-          <span class='col-sm-9'>未分類({{$taskcnt}})</span>
-          @if ($timers>0)
-            @if ($timers==1)
-                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timer</strong></span>
-            @elseif ($timers>1)
-                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timers</strong></span>
-            @endif
-          @endif
-          @php
-                $timers = 0;
-                $taskcnt = 0;
-          @endphp
-          </div>
-        </a>
-      </h5>
-    </div><!-- /.card-header -->
-    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-      <div class="card-body p-0">
-        @if (count($tasks) > 0)
-            @include('tasks.tasklist', ['tasks' => $tasks,'catid' => 0])
-        @endif
-      </div><!-- /.card-body -->
-    </div><!-- /.collapse -->
-  </div><!-- /.card -->
+<div class="accordion mt-2" id="accordion" role="tablist" aria-multiselectable="true">
     @foreach ($categories as $category)
    <div class="card">
     <div class="card-header" role="tab" id="heading{{$category->id}}">
@@ -134,6 +91,51 @@
     </div><!-- /.collapse -->
   </div><!-- /.card -->
     @endforeach
+  <div class="card">
+    <div class="card-header" role="tab" id="headingOne">
+      <h5 class="mb-0">
+        <a class="text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapseOne" role="button" aria-expanded="true" aria-controls="collapseOne">
+            <div class="row">
+            @php
+                $timers = 0;
+                $taskcnt = 0;
+            @endphp
+            @foreach ($tasks as $task)
+                @if ($task->category_id==0)
+                    @php
+                    $taskcnt = $taskcnt+1;
+                    @endphp
+                    @if ($task->status==1)
+                        @php
+                            $timers = $timers+1;
+                        @endphp
+                    @endif
+                @endif
+            @endforeach
+          <span class='col-sm-9'>未分類({{$taskcnt}})</span>
+          @if ($timers>0)
+            @if ($timers==1)
+                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timer</strong></span>
+            @elseif ($timers>1)
+                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timers</strong></span>
+            @endif
+          @endif
+          @php
+                $timers = 0;
+                $taskcnt = 0;
+          @endphp
+          </div>
+        </a>
+      </h5>
+    </div><!-- /.card-header -->
+    <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="card-body p-0">
+        @if (count($tasks) > 0)
+            @include('tasks.tasklist', ['tasks' => $tasks,'catid' => 0])
+        @endif
+      </div><!-- /.card-body -->
+    </div><!-- /.collapse -->
+  </div><!-- /.card -->
 </div><!-- /#accordion -->
     
 

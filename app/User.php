@@ -76,11 +76,21 @@ class User extends Authenticatable
     public function stop($id,$content)
     {
                 $user = \Auth::user();
+                
+                
+                $task = Task::find($id);
+                if ($task->user_id==$user->id){
+                    $category = Category::find($task->category_id);
+                    if ($category->user_id==$user->id){
+                    $category->updated_at = now();
+                    $category->save();
+                    }
+                }
+                
                 $start_last = Activity::where('task_id',$id)->where('user_id',$user->id)->where('status',1)->orderBy('created_at', 'desc')->first();
 
                 $timestamp = strtotime($start_last->created_at);// 1つ目の時刻==start_atに代わる物
                 $timestamp2 = strtotime(now());
-
                 
             //================tasksテーブルの操作==============================
                 $task = Task::find($id);
@@ -143,6 +153,16 @@ class User extends Authenticatable
     public function pause($id)
     {
                 $user = \Auth::user();
+                
+                $task = Task::find($id);
+                if ($task->user_id==$user->id){
+                    $category = Category::find($task->category_id);
+                    if ($category->user_id==$user->id){
+                    $category->updated_at = now();
+                    $category->save();
+                    }
+                }
+
                 $start_last = Activity::where('task_id',$id)->where('user_id',$user->id)->where('status',1)->orderBy('created_at', 'desc')->first();
 
                 $timestamp = strtotime($start_last->created_at);// 1つ目の時刻==start_atに代わる物
@@ -210,6 +230,16 @@ class User extends Authenticatable
     public function finish($id,$content)
     {
                 $user = \Auth::user();
+
+                $task = Task::find($id);
+                if ($task->user_id==$user->id){
+                    $category = Category::find($task->category_id);
+                    if ($category->user_id==$user->id){
+                    $category->updated_at = now();
+                    $category->save();
+                    }
+                }                       
+
                 $start_last = Activity::where('task_id',$id)->where('user_id',$user->id)->orderBy('created_at', 'desc')->first();
 
                 $timestamp = strtotime($start_last->created_at);// 1つ目の時刻==start_atに代わる物
