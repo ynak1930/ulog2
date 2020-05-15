@@ -151,7 +151,7 @@ class User extends Authenticatable
                 
             //================tasksテーブルの操作==============================
                 $task = Task::find($id);
-                $content = 'pause';
+                $content = '中断';
                 //=========時間の計算==========================================
                 /*
                 $task->stop_at = now();
@@ -184,7 +184,7 @@ class User extends Authenticatable
                 //===========================================================
                 //$contentにタイムスタンプの情報を添加--------------------------------
                 //-----------------------------------------------------------------------
-                $task->lastcomment = 'pause';
+                $task->lastcomment = '中断';
                 $task->status = 3;    //0=新規作成 , 1=開始 , [2=停止], 3=完了
                 if ($task->timer>=2147483646)
                 {
@@ -194,7 +194,7 @@ class User extends Authenticatable
                 }
                 $content = "[".$hour_from.":".$min_from.":".$sec_from."]～[".$hour_to.":".$min_to.":".$sec_to."]".PHP_EOL."[".$hour.":".$min.":".$sec."]".PHP_EOL.$content;
 
-                $this->activities()->attach($id,['content' => 'pause','status'=>3,'timer'=>$task->timer]);
+                $this->activities()->attach($id,['content' => $content,'status'=>3,'timer'=>$task->timer]);
                 $task->save();
                 
             //======================================================tasksテーブルの操作

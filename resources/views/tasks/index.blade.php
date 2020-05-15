@@ -37,222 +37,59 @@
                         
                         </span>
                         
-                        <span>
-                            <script src="{{ asset('/js/sort2.js') }}"></script>
-                            <form name="sort_form2" style="display: inline">
-                            <select name="sort2" onchange="dropsort2()">
-                                <option value="">カテゴリー</option>
-                                <option value="{{ route('tasks.index', ['categories' => 0]) }}">すべて</option>
-                        @if (count($categories) > 0)
-                           @foreach ($categories as $category)
-                               <option value="{{ route('tasks.index', ['categories' => $category->id]) }}">{{$category->category}}</option>
-                                
-                            @endforeach
-                        @endif
-                            </select>
-                        </form>
-                        を表示
-                        </span>
-                        
     </div>
+    @if (count($categories) > 0)
+    
+<div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="card">
+    <div class="card-header" role="tab" id="headingOne">
+      <h5 class="mb-0">
+        <a class="text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapseOne" role="button" aria-expanded="true" aria-controls="collapseOne">
+          未分類
+        </a>
+      </h5>
+    </div><!-- /.card-header -->
+    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+      <div class="card-body p-0">
+        @if (count($tasks) > 0)
+            @include('tasks.tasklist', ['tasks' => $tasks,'catid' => 0])
+        @endif
+      </div><!-- /.card-body -->
+    </div><!-- /.collapse -->
+  </div><!-- /.card -->
+    @foreach ($categories as $category)
+   <div class="card">
+    <div class="card-header" role="tab" id="heading{{$category->id}}">
+      <h5 class="mb-0">
+        <a class="collapsed text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapse{{$category->id}}" role="button" aria-expanded="false" aria-controls="collapse{{$category->id}}">
+          {{ $category->category }}
+        </a>
+      </h5>
+    </div><!-- /.card-header -->
+    <div id="collapse{{$category->id}}" class="collapse" role="tabpanel" aria-labelledby="heading{{$category->id}}">
+      <div class="card-body p-0">
+        @if (count($tasks) > 0)
+            @include('tasks.tasklist', ['tasks' => $tasks,'catid' => $category->id])
+        @endif
+      </div><!-- /.card-body -->
+    </div><!-- /.collapse -->
+  </div><!-- /.card -->
+    @endforeach
+</div><!-- /#accordion -->
+    
+
+
+    @endif    
 
 
     @if (count($tasks) > 0)
-
 
         <div class="m-3">
             <p>
             <span id="timers_base" class="text-center"><strong id="timers"></strong></span>
             </p>
         </div>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th class="text-center">id</th>
-                    <th class="text-left"><span>プロジェクト名</span></th>
-                    <th class="text-left" colspan=3>稼働時間</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($tasks as $task)
-                <tr>
 
-                    @if ($task->status==0)<!--new-->
-                        <td class="text-center alert alert-info">
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td class="alert alert-success text-center">
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--pause-->
-                        <td class="alert alert-warning text-center">
-                    @elseif ($task->status==4)<!--finish(finish)-->
-                        <td class="alert alert-dark text-center">
-                    @else
-                        <td>
-                    @endif
-                        {!! link_to_route('tasks.show', $task->id, ['id' => $task->id]) !!}
-
-                    </td>
-                    
-                    @if ($task->status==0)<!--new-->
-                        <td class="text-center alert alert-info">
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td class="alert alert-success text-center">
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--pause-->
-                        <td class="alert alert-warning text-center">
-                    @else<!--status==4 finish(finish)-->
-                        <td class="alert alert-secondary text-center">
-                    @endif
-                            <strong style="word-break: break-all;">{{ $task->name }}</strong>
-                            <div>
-                            @if ($task->category_id==0)
-                                未分類
-                            @else
-
-                                @foreach ($categories as $category)
-                                    @if ($task->category_id==$category->id)
-                                        {{$category->category}}
-                                    @endif
-                                @endforeach
-
-                            @endif
-                            </div>
-
-                    </td>
-                    @if ($task->status==0)<!--new-->
-                        <td class="text-left alert alert-info">
-                            <span class="badge badge-info">新着</span>
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td class="alert alert-success text-left">
-
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td class="alert alert-danger text-left">
-                            <span class="badge badge-danger">停止中</span>
-                    @elseif ($task->status==3)<!--pause-->
-                        <td class="alert alert-warning text-left">
-                            <span class="badge badge-warning">一時停止中</span>
-                    @elseif ($task->status==4)<!--finish(finish)-->
-                        <td class="alert alert-secondary text-left">
-                            <span class="badge badge-dark">完了</span>
-                    @else
-                        <td>
-                    @endif
-                        
-                            @if ($task->status!=1)
-                            <!--タイムゾーンの設定で9時間足されちゃうので9時間マイナス・他にいい方法が無いか探す-->
-                            {{sprintf('%02d', floor( $task->timer / 3600 ))}}:{{sprintf('%02d',floor( ( $task->timer / 60 ) % 60 ))}}:{{sprintf('%02d',$task->timer % 60)}}
-                            @if (floor($task->timer / 3600/24)>0)
-                            ({{floor($task->timer / 3600/24)}}日)
-                            @endif
-                            @elseif ($task->status==1)
-                                <span class="badge badge-success">実行中</span>
-                                <span><strong id="{{$task->id}}"></strong></span>
-                                <span>[<strong id="{{$task->id}}_cur"></strong>]</span>
-                            @endif
-
-                    </td>
-                    @if ($task->status==0)<!--new-->
-                        <td class="text-center alert alert-info">
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td class="alert alert-success text-center">
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--pause-->
-                        <td class="alert alert-warning text-center">
-                    @elseif ($task->status==4)<!--finish(finish)-->
-                        <td class="alert alert-secondary text-center">
-                    @else
-                        <td>
-                    @endif
-                    
-                        @if ($task->status!=1)<!--status!=1　新規=0、2=stop、 3=finishならスタートボタンを表示する-->
-                        <a href="{{ route('starts.create', ['id' => $task->id]) }}"><i class="fas fa-play"></i></a><!--STARTリンク-->
-                        @elseif ($task->status==1)<!--status==1 status==1==動いてるなら　ストップボタンを表示する-->
-                        <a href="{{ route('pauses.store', ['id' => $task->id ]) }}" class="mr-4"><i class="fas fa-pause"></i></a><!--STOPリンク-->
-                        <a href="{{ route('stops.create', ['id' => $task->id]) }}"><i class="fas fa-stop"></i></a><!--STOPリンク-->
-                        @endif
-                    </td>
-                </tr>
-                <tr>
-                    @if ($task->status==0)<!--new-->
-                        <td  rowspan=2  class="text-center alert alert-info">
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td  rowspan=2  class="alert alert-success text-center">
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td  rowspan=2  class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--pause-->
-                        <td  rowspan=2 class="alert alert-warning text-center">
-                    @elseif ($task->status==4)<!--finish(finish)-->
-                        <td  rowspan=2  class="alert alert-secondary text-center">
-                    @else
-                        <td  rowspan=2 >
-                    @endif
-                        
-                        @if ($task->status!=4)
-
-
-
-                        {!! Form::model($task, ['route' => ['tasks.finish', $task->id], 'method' => 'put']) !!}
-                        <!--<i class="fas fa-check"></i>この画像を使う-->
-                        <button type="sumbit" class="btn btn-primary" onclick="return confirm('このプロジェクトを完了しますか？')">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        {!! Form::close() !!}
-                        @endif
-                        
-                    </td>
-                    
-                    <td colspan=2 style="word-break: break-all;">
-                         {!! nl2br(e($task->lastcomment)) !!}
-                    </td>
-
-                    @if ($task->status==0)<!--new-->
-                        <td rowspan=2 class="text-center alert alert-info">
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <td rowspan=2  class="alert alert-success text-center">
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <td rowspan=2  class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--pause-->
-                        <td  rowspan=2 class="alert alert-warning text-center">
-                    @elseif ($task->status==4)<!--finish(finish)-->
-                        <td rowspan=2  class="alert alert-secondary text-center">
-                    @else
-                        <td rowspan=2 >
-                    @endif
-                    
-                        {!! Form::model($task, ['route' => ['tasks.destroy', $task->id], 'method' => 'delete']) !!}
-                        <div class="text-center">
-                        <button type="sumbit" class="btn btn-danger" onclick="return confirm('このプロジェクトを削除しますか？')">
-                            <i class="fas fa-trash-alt"></i>
-                        </button
-                        </div>
-                        {!! Form::close() !!}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan=2>
-                    @if ($task->status==0)<!--new-->
-                        <span class="text-muted">{{$task->created_at}}に作成</span>
-                    @elseif ($task->status==1)<!--start(move)-->
-                        <span class="text-muted">{{$task->start_at}}に開始</span>
-                    @elseif ($task->status==2)<!--stop(stop)-->
-                        <span class="text-muted">{{$task->stop_at}}に停止</span>
-                    @elseif ($task->status==3)<!--pause-->
-                        <span class="text-muted">{{$task->stop_at}}に中断</span>
-                    @elseif ($task->status==4)<!--finish(finish)-->
-                        <span class="text-muted">{{$task->stop_at}}に完了</span>
-                    @else
-                    @endif
-                        
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        {{ $tasks->links() }}
         <script type="text/javascript">
         var start_at = new Array();
         var timer = new Array();
