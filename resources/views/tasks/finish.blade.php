@@ -7,7 +7,7 @@
 
 
     @if (Auth::check())
-            {!! Form::model($task, ['route' => ['tasks.update', $task->id] , 'method' => 'put']) !!}
+            {!! Form::model($task, ['route' => ['finish.store', $task->id] , 'method' => 'put']) !!}
 
         <div class="form-group">
 

@@ -56,7 +56,6 @@ class StartsController extends Controller
         }
 
 
-
         return redirect('/');
     }
 }

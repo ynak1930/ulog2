@@ -30,7 +30,7 @@ class TasksController extends Controller
             $cur_category = $request->categories;
             $category_flg = FALSE;
             
-            
+
             if ($cur_category>0){
                 $category = Category::find($cur_category);
                 if ($category){
@@ -236,6 +236,8 @@ class TasksController extends Controller
         'lastcomment'=>"",
         'category_id'=> $cur_cat,
             ]);
+            
+
         $message = 'プロジェクト'.$request->name.'を追加しました。';
 
         }else{
@@ -291,6 +293,7 @@ class TasksController extends Controller
                         $month = date('m');
 
 
+                        
                         $start = Start::where('task_id',$id)->where('user_id',$user['id'])->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get();
                         $stop = Stop::where('task_id',$id)->where('user_id',$user['id'])->whereYear('created_at', '=', $year)->whereMonth('created_at', '=', $month)->get();
                     break;
@@ -394,7 +397,7 @@ class TasksController extends Controller
         $message = '失敗しました。';
     }
         
-        return redirect('/')->with('flash_message', $message);
+        return back()->with('flash_message', $message);
     }
 
     /**
@@ -406,37 +409,7 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)//完了処理
     {
-        $message = '';
-        if ($request->content){
-            
-        }else{
-            return redirect('/');
-        }
-        if (\Auth::check()) {
-            $user = \Auth::user();
-            $task = Task::find($id);
-            $this->validate($request, [
-            'content' => 'required|max:191',
-        ]);
-        if ($task['user_id']==$user['id']){
-        
-        if ($task->status==1){//タスクが動いてたら停止処理
-            \Auth::user()->stop($id,$request['content']);
-        }else{//その他開始コメ入れて、停止コメ入れる
-            \Auth::user()->start($id,$request['content']);
-            \Auth::user()->stop($id,$request['content']);
-        }
-        
-        $task->lastcomment = $request['content'];
-        $task->status = 3;
-        $task->save();
-        $message = $task->name.'を完了しました。';
-        }else{
-        $message = '失敗しました。';
-        }
-
-    }
-        return redirect('/')->with('flash_message', $message);
+    //
     }
 
     /**
@@ -464,22 +437,5 @@ class TasksController extends Controller
         return redirect('/')->with('flash_message', $message);
     }
 
-    public function finish($id)//完了ページ入力
-    {
-        if (\Auth::check()) {
-            $task_id = $id;
-            $user = \Auth::user();
-            $task = Task::find($id);
 
-   
-            if ($task['user_id']==$user['id']){
-                    return view('tasks.finish', [
-                        'task' => $task,
-                    ]);
-
-            }
-        }
-        return redirect('/');
-    }
-    
 }

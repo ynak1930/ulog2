@@ -6,7 +6,7 @@
     @if (Auth::check())
         <!-- フラッシュメッセージ -->
         @if (session('flash_message'))
-            <div class="flash_message">
+            <div class="flash_message alert alert-info">
                 {{ session('flash_message') }}
             </div>
         @endif
@@ -83,8 +83,10 @@
                         <td class="alert alert-success text-center">
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--finish(finish)-->
-                        <td class="alert alert-secondary text-center">
+                    @elseif ($task->status==3)<!--pause-->
+                        <td class="alert alert-warning text-center">
+                    @elseif ($task->status==4)<!--finish(finish)-->
+                        <td class="alert alert-dark text-center">
                     @else
                         <td>
                     @endif
@@ -98,7 +100,9 @@
                         <td class="alert alert-success text-center">
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td class="alert alert-danger text-center">
-                    @else<!--status==3 finish(finish)-->
+                    @elseif ($task->status==3)<!--pause-->
+                        <td class="alert alert-warning text-center">
+                    @else<!--status==4 finish(finish)-->
                         <td class="alert alert-secondary text-center">
                     @endif
                             <strong style="word-break: break-all;">{{ $task->name }}</strong>
@@ -125,8 +129,11 @@
 
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td class="alert alert-danger text-left">
-                            <span class="badge badge-warning">停止中</span>
-                    @elseif ($task->status==3)<!--finish(finish)-->
+                            <span class="badge badge-danger">停止中</span>
+                    @elseif ($task->status==3)<!--pause-->
+                        <td class="alert alert-warning text-left">
+                            <span class="badge badge-warning">一時停止中</span>
+                    @elseif ($task->status==4)<!--finish(finish)-->
                         <td class="alert alert-secondary text-left">
                             <span class="badge badge-dark">完了</span>
                     @else
@@ -152,7 +159,9 @@
                         <td class="alert alert-success text-center">
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--finish(finish)-->
+                    @elseif ($task->status==3)<!--pause-->
+                        <td class="alert alert-warning text-center">
+                    @elseif ($task->status==4)<!--finish(finish)-->
                         <td class="alert alert-secondary text-center">
                     @else
                         <td>
@@ -161,6 +170,7 @@
                         @if ($task->status!=1)<!--status!=1　新規=0、2=stop、 3=finishならスタートボタンを表示する-->
                         <a href="{{ route('starts.create', ['id' => $task->id]) }}"><i class="fas fa-play"></i></a><!--STARTリンク-->
                         @elseif ($task->status==1)<!--status==1 status==1==動いてるなら　ストップボタンを表示する-->
+                        <a href="{{ route('pauses.store', ['id' => $task->id ]) }}" class="mr-4"><i class="fas fa-pause"></i></a><!--STOPリンク-->
                         <a href="{{ route('stops.create', ['id' => $task->id]) }}"><i class="fas fa-stop"></i></a><!--STOPリンク-->
                         @endif
                     </td>
@@ -172,13 +182,15 @@
                         <td  rowspan=2  class="alert alert-success text-center">
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td  rowspan=2  class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--finish(finish)-->
+                    @elseif ($task->status==3)<!--pause-->
+                        <td  rowspan=2 class="alert alert-warning text-center">
+                    @elseif ($task->status==4)<!--finish(finish)-->
                         <td  rowspan=2  class="alert alert-secondary text-center">
                     @else
                         <td  rowspan=2 >
                     @endif
                         
-                        @if ($task->status!=3)
+                        @if ($task->status!=4)
 
 
 
@@ -202,7 +214,9 @@
                         <td rowspan=2  class="alert alert-success text-center">
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <td rowspan=2  class="alert alert-danger text-center">
-                    @elseif ($task->status==3)<!--finish(finish)-->
+                    @elseif ($task->status==3)<!--pause-->
+                        <td  rowspan=2 class="alert alert-warning text-center">
+                    @elseif ($task->status==4)<!--finish(finish)-->
                         <td rowspan=2  class="alert alert-secondary text-center">
                     @else
                         <td rowspan=2 >
@@ -225,7 +239,9 @@
                         <span class="text-muted">{{$task->start_at}}に開始</span>
                     @elseif ($task->status==2)<!--stop(stop)-->
                         <span class="text-muted">{{$task->stop_at}}に停止</span>
-                    @elseif ($task->status==3)<!--finish(finish)-->
+                    @elseif ($task->status==3)<!--pause-->
+                        <span class="text-muted">{{$task->stop_at}}に中断</span>
+                    @elseif ($task->status==4)<!--finish(finish)-->
                         <span class="text-muted">{{$task->stop_at}}に完了</span>
                     @else
                     @endif
@@ -292,7 +308,13 @@ function mytime(timer) {
     hou = Math.floor(timer/3600);
     min = Math.floor((timer/60)%60);
     sec = Math.floor(timer % 60);
-    var tmp = "00" + String( sec );
+    var tmp = "00" + String( hou );
+    hou = tmp.substr(tmp.length - 2);
+
+    tmp = "00" + String( min );
+    min = tmp.substr(tmp.length - 2);
+
+    tmp = "00" + String( sec );
     sec = tmp.substr(tmp.length - 2);
 
     if(day>0){

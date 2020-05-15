@@ -12,7 +12,17 @@ class Task extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
+    public function activity()
+    {
+        return $this->belongsToMany('activities', 'user_id','task_id')->withTimestamps();//???
+    }
+
+    public function status()
+    {
+        return $this->belongsToMany('statuses', 'user_id','task_id')->withTimestamps();//???
+    }
+
     public function taskstarts()
     {
         return $this->belongsToMany('starts', 'user_id','task_id')->withTimestamps();//???
