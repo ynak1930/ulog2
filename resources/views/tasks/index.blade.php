@@ -20,20 +20,21 @@
                             <script src="{{ asset('/js/sort.js') }}"></script>
                             <form name="sort_form" style="display: inline">
                             <select name="sort" onchange="dropsort()">
-                                <option value="">フィルタ/並べ替え</option>
+                                <option value="">フィルタ/並び替え</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 12]) }}">すべてを表示</option>  
                                 <option value="{{ route('tasks.index', ['sortby' => 6]) }}">新規プロジェクトのみ表示</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 7]) }}">実行中プロジェクトのみ表示</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 12]) }}">中断したプロジェクトのみ表示</option>    
                                 <option value="{{ route('tasks.index', ['sortby' => 8]) }}">停止中プロジェクトのみ表示</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 9]) }}">完了したプロジェクトのみ表示</option>
+                                <option value="">---</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 3]) }}">操作したのが最近</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 2]) }}">操作したのが古い</option>
+
                                 <option value="{{ route('tasks.index', ['sortby' => 11]) }}">作成日が新しい</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 3]) }}">停止した時間が新しい</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 5]) }}">開始した時間が新しい</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 10]) }}">作成日が古い</option>
+                                <option value="{{ route('tasks.index', ['sortby' => 1]) }}">稼働時間が長い</option>
                                 <option value="{{ route('tasks.index', ['sortby' => 0]) }}">稼働時間が短い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 2]) }}">停止した時間が古い</option>
-                                <option value="{{ route('tasks.index', ['sortby' => 4]) }}">開始した時間が古い</option>
                             </select>
                         </form>
                         

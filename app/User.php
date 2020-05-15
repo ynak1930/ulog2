@@ -60,6 +60,7 @@ class User extends Authenticatable
                 
                 $task = Task::find($id);
                 $task->lastcomment = $content;
+                $task->updated_at = now();
                 $task->start_at = now();
                 $task->status = 1;    // 追加
                 $task->save();                
@@ -138,6 +139,7 @@ class User extends Authenticatable
                 }
 
                 $this->activities()->attach($id,['content' => $content,'status'=>2,'timer'=>$task->timer]);
+                $task->updated_at = now();
                 $task->save();
                 
             //======================================================tasksテーブルの操作
@@ -215,6 +217,7 @@ class User extends Authenticatable
                 $content = "[".$hour_from.":".$min_from.":".$sec_from."]～[".$hour_to.":".$min_to.":".$sec_to."]".PHP_EOL."[".$hour.":".$min.":".$sec."]".PHP_EOL.$content;
 
                 $this->activities()->attach($id,['content' => $content,'status'=>3,'timer'=>$task->timer]);
+                $task->updated_at = now();
                 $task->save();
                 
             //======================================================tasksテーブルの操作
@@ -290,6 +293,7 @@ class User extends Authenticatable
                 }
                 $task->status = 4;    //0=新規作成 , 1=開始 , [2=停止], 4=完了
                 $this->activities()->attach($id,['content' => $content,'status'=>4,'timer'=>$task->timer]);
+                $task->updated_at = now();
                 $task->save();
                 
             //======================================================tasksテーブルの操作
