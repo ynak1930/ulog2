@@ -69,19 +69,19 @@ class TasksController extends Controller
                     $tasks = $user->tasks()->orderBy('start_at', 'desc')->get();//最後に開始した時間が新しい(消す)
                     break;
                 case 6:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'desc')->get();
                     $tasks = $user->tasks()->where('status',0)->orderBy('created_at', 'desc')->get();//新規プロジェクト
                     break;
                 case 7:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'desc')->get();
                     $tasks = $user->tasks()->where('status',1)->orderBy('updated_at', 'desc')->get();//実行中プロジェクト
                     break;
                 case 8:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'desc')->get();
                     $tasks = $user->tasks()->where('status',2)->orderBy('updated_at', 'desc')->get();//停止中プロジェクト
                     break;
                 case 9:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'desc')->get();
                     $tasks = $user->tasks()->where('status',4)->orderBy('updated_at', 'desc')->get();//完了したプロジェクト
                     break;
                 case 10:
@@ -93,7 +93,7 @@ class TasksController extends Controller
                     $tasks = $user->tasks()->orderBy('created_at', 'desc')->get();//作成日が新しい
                     break;
                 case 12:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'desc')->get();
                     $tasks = $user->tasks()->where('status',3)->orderBy('updated_at', 'desc')->get();//中断中プロジェクト
                     break;
                 default:
