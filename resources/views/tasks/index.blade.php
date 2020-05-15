@@ -59,7 +59,6 @@
                 @if ($category->id==$task->category_id)
                     @php
                     $taskcnt = $taskcnt+1;
-                    $timersum = $timersum+$task->timer;
                     @endphp
                     @if ($task->status==1)
                         @php
@@ -70,7 +69,7 @@
             @endforeach
           <span class='col-sm-9'>
               {{ $category->category .'('.$taskcnt.')'}} - 
-              {{sprintf('%02d', floor( $timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$timersum % 60)}}
+              {{sprintf('%02d', floor( $category->timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $category->timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$category->timersum % 60)}}
           </span>
           @if ($timers>0)
             @if ($timers==1)
@@ -80,7 +79,6 @@
             @endif
           @endif
           @php
-                $timersum = 0;
                 $timers = 0;
                 $taskcnt = 0;
           @endphp
@@ -122,8 +120,7 @@
                 @endif
             @endforeach
           <span class='col-sm-9'>
-                未分類({{$taskcnt}}) - 
-                {{sprintf('%02d', floor( $timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$timersum % 60)}}
+                未分類({{$taskcnt}})
           </span>
           @if ($timers>0)
             @if ($timers==1)
