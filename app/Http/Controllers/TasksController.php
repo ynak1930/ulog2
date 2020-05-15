@@ -30,15 +30,26 @@ class TasksController extends Controller
             $cur_category = $request->categories;
             $category_flg = FALSE;
             
+            $timersums=Task::where('user_id',$user->id)->selectRaw('category_id, sum(timer) as timersum')->groupBy('category_id')->orderBy('timersum', 'desc')->get();
+
+            foreach ($timersums as $timersum){
+                $timerupd=Category::find($timersum->category_id);
+                
+                if($timerupd){
+                $timerupd->timersum = $timersum->timersum;
+                $timerupd->save();
+                }
+                
+            }
 
 
             switch ($request->sortby) {
                 case 0:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'asc')->get();
                     $tasks = $user->tasks()->orderBy('timer', 'asc')->get();//稼働時間が短い
                     break;
                 case 1:
-                    $categories = $user->categories()->orderBy('updated_at', 'desc')->get();
+                    $categories = $user->categories()->orderBy('timersum', 'desc')->get();
                     $tasks = $user->tasks()->orderBy('timer', 'desc')->get();//稼働時間が長い
                     break;
                 case 2:
@@ -92,13 +103,11 @@ class TasksController extends Controller
             }
 
 
-
-
-
             $data = [
                 'user' => $user,
                 'tasks' => $tasks,
                 'categories' => $categories,
+                'timersums' => $timersums,
             ];
             return view('tasks.index', $data);
         }

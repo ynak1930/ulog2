@@ -52,12 +52,14 @@
             <div class="row">
             @php
                 $timers = 0;
+                $timersum = 0;
                 $taskcnt = 0;
             @endphp
               @foreach ($tasks as $task)
                 @if ($category->id==$task->category_id)
                     @php
                     $taskcnt = $taskcnt+1;
+                    $timersum = $timersum+$task->timer;
                     @endphp
                     @if ($task->status==1)
                         @php
@@ -66,7 +68,10 @@
                     @endif
                 @endif
             @endforeach
-          <span class='col-sm-9'>{{ $category->category .'('.$taskcnt.')'}}</span>
+          <span class='col-sm-9'>
+              {{ $category->category .'('.$taskcnt.')'}} - 
+              {{sprintf('%02d', floor( $timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$timersum % 60)}}
+          </span>
           @if ($timers>0)
             @if ($timers==1)
                 <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timer</strong></span>
@@ -75,6 +80,7 @@
             @endif
           @endif
           @php
+                $timersum = 0;
                 $timers = 0;
                 $taskcnt = 0;
           @endphp
@@ -100,11 +106,13 @@
             @php
                 $timers = 0;
                 $taskcnt = 0;
+                $timersum = 0;
             @endphp
             @foreach ($tasks as $task)
                 @if ($task->category_id==0)
                     @php
                     $taskcnt = $taskcnt+1;
+                    $timersum = $timersum+$task->timer;
                     @endphp
                     @if ($task->status==1)
                         @php
@@ -113,7 +121,10 @@
                     @endif
                 @endif
             @endforeach
-          <span class='col-sm-9'>未分類({{$taskcnt}})</span>
+          <span class='col-sm-9'>
+                未分類({{$taskcnt}}) - 
+                {{sprintf('%02d', floor( $timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$timersum % 60)}}
+          </span>
           @if ($timers>0)
             @if ($timers==1)
                 <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timer</strong></span>
@@ -124,6 +135,7 @@
           @php
                 $timers = 0;
                 $taskcnt = 0;
+                $timersum = 0;
           @endphp
           </div>
         </a>
