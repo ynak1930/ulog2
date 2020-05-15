@@ -45,7 +45,36 @@
     <div class="card-header" role="tab" id="headingOne">
       <h5 class="mb-0">
         <a class="text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapseOne" role="button" aria-expanded="true" aria-controls="collapseOne">
-          未分類
+            <div class="row">
+            @php
+                $timers = 0;
+                $taskcnt = 0;
+            @endphp
+            @foreach ($tasks as $task)
+                @if ($task->category_id==0)
+                    @php
+                    $taskcnt = $taskcnt+1;
+                    @endphp
+                    @if ($task->status==1)
+                        @php
+                            $timers = $timers+1;
+                        @endphp
+                    @endif
+                @endif
+            @endforeach
+          <span class='col-sm-9'>未分類({{$taskcnt}})</span>
+          @if ($timers>0)
+            @if ($timers==1)
+                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timer</strong></span>
+            @elseif ($timers>1)
+                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timers</strong></span>
+            @endif
+          @endif
+          @php
+                $timers = 0;
+                $taskcnt = 0;
+          @endphp
+          </div>
         </a>
       </h5>
     </div><!-- /.card-header -->
@@ -62,8 +91,38 @@
     <div class="card-header" role="tab" id="heading{{$category->id}}">
       <h5 class="mb-0">
         <a class="collapsed text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapse{{$category->id}}" role="button" aria-expanded="false" aria-controls="collapse{{$category->id}}">
-          {{ $category->category }}
+            <div class="row">
+            @php
+                $timers = 0;
+                $taskcnt = 0;
+            @endphp
+              @foreach ($tasks as $task)
+                @if ($category->id==$task->category_id)
+                    @php
+                    $taskcnt = $taskcnt+1;
+                    @endphp
+                    @if ($task->status==1)
+                        @php
+                            $timers = $timers+1;
+                        @endphp
+                    @endif
+                @endif
+            @endforeach
+          <span class='col-sm-9'>{{ $category->category .'('.$taskcnt.')'}}</span>
+          @if ($timers>0)
+            @if ($timers==1)
+                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timer</strong></span>
+            @elseif ($timers>1)
+                <span class='alert alert-success col-sm-3 m-0'><strong>{{$timers}} timers</strong></span>
+            @endif
+          @endif
+          @php
+                $timers = 0;
+                $taskcnt = 0;
+          @endphp
+          </div>
         </a>
+
       </h5>
     </div><!-- /.card-header -->
     <div id="collapse{{$category->id}}" class="collapse" role="tabpanel" aria-labelledby="heading{{$category->id}}">
@@ -124,7 +183,7 @@
         }else{
             if(cnt>1){
                 var elem = document.getElementById("timers_base");
-                elem.innerHTML = "<span id='timers_base' class='alert alert-warning text-center'><strong id='timers'>"+cnt+" timers - multi</strong></span>";
+                elem.innerHTML = "<span id='timers_base' class='alert alert-warning text-center'><strong id='timers'>"+cnt+" timers</strong></span>";
             }
         }
         setInterval('time()',1000);
