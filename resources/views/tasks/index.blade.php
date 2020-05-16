@@ -84,7 +84,7 @@
                     @endif
                 @endif
             @endforeach
-          <span class='col-sm-9' style="border-left: solid 10px #{{$curcolx}};">
+          <span class='col-sm-9' style="border-bottom: solid 10px #{{$curcolx}};">
             {{ $category->category .'('.$taskcnt.')'}} - 
             {{sprintf('%02d', floor( $category->timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $category->timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$category->timersum % 60)}}
           </span>
