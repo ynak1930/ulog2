@@ -29,19 +29,17 @@ class TasksController extends Controller
             $ord = $request->ord;
             $cur_category = $request->categories;
             $category_flg = FALSE;
-            
+
+
             $timersums=Task::where('user_id',$user->id)->selectRaw('category_id, sum(timer) as timersum')->groupBy('category_id')->orderBy('timersum', 'desc')->get();
+   
+            $category=Category::where('user_id',$user->id)->get();
 
-            foreach ($timersums as $timersum){
-                $timerupd=Category::find($timersum->category_id);
-                
-                if($timerupd){
-                $timerupd->timersum = $timersum->timersum;
-                $timerupd->save();
-                }
-                
+            foreach ($category as $cat){
+                $cat->timersum = Task::where('user_id',$user->id)->where('category_id',$cat->id)->sum('timer');
+                $cat->save();
             }
-
+            
 
             switch ($request->sortby) {
                 case 0:
@@ -102,12 +100,15 @@ class TasksController extends Controller
                     break;
             }
 
+            $alltimersum = Category::where('user_id',$user->id)->sum('timersum');
 
+            
             $data = [
                 'user' => $user,
                 'tasks' => $tasks,
                 'categories' => $categories,
                 'timersums' => $timersums,
+                'alltimersum' => $alltimersum,
             ];
             return view('tasks.index', $data);
         }
@@ -116,6 +117,7 @@ class TasksController extends Controller
         $count = User::count();
         $taskcount = Task::count();
         $taskmcount = Task::where('status',1)->count();
+
 
         return view('welcome',['usercnt' => $count,
                                 'taskcnt' => $taskcount,
@@ -327,8 +329,11 @@ class TasksController extends Controller
         if ($task['user_id']==$user['id']){
 
             if ($request['category']!=null){
+                
                 $task->category_id = $request['category'];
                 $task->save();
+
+
                 $message = 'カテゴリーを変更しました。'.PHP_EOL;
             }else{
 

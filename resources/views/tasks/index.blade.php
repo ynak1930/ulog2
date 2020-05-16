@@ -50,7 +50,24 @@
       <h5 class="mb-0">
         <a class="collapsed text-body d-block p-3 m-n3" data-toggle="collapse" href="#collapse{{$category->id}}" role="button" aria-expanded="false" aria-controls="collapse{{$category->id}}">
             <div class="row">
+                
             @php
+                $x = $alltimersum.'.000';
+                $curtime = "";
+                $curtime = $category->timersum.'.000';
+
+                $curper = 0.000;
+                $rgbmax = 16777215.000;
+
+                if ($x>0.000000){
+                $curper = $curtime / $x;
+                }else{
+                $x=1.000;
+                }
+                $curcol = 0.000;
+                $curcol = $rgbmax * $curper;
+                $curcolx = dechex($curcol);
+
                 $timers = 0;
                 $timersum = 0;
                 $taskcnt = 0;
@@ -67,9 +84,9 @@
                     @endif
                 @endif
             @endforeach
-          <span class='col-sm-9'>
-              {{ $category->category .'('.$taskcnt.')'}} - 
-              {{sprintf('%02d', floor( $category->timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $category->timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$category->timersum % 60)}}
+          <span class='col-sm-9' style="border-left: solid 10px #{{$curcolx}};">
+            {{ $category->category .'('.$taskcnt.')'}} - 
+            {{sprintf('%02d', floor( $category->timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $category->timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$category->timersum % 60)}}
           </span>
           @if ($timers>0)
             @if ($timers==1)
@@ -147,8 +164,6 @@
     </div><!-- /.collapse -->
   </div><!-- /.card -->
 </div><!-- /#accordion -->
-    
-
 
     @endif    
 
