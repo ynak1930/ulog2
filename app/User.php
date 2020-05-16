@@ -90,7 +90,11 @@ class User extends Authenticatable
                 
                 $start_last = Activity::where('task_id',$id)->where('user_id',$user->id)->where('status',1)->orderBy('created_at', 'desc')->first();
 
+                if ($start_last){
                 $timestamp = strtotime($start_last->created_at);// 1つ目の時刻==start_atに代わる物
+                }else{
+                $timestamp = now();
+                }
                 $timestamp2 = strtotime(now());
                 
             //================tasksテーブルの操作==============================
@@ -167,7 +171,11 @@ class User extends Authenticatable
 
                 $start_last = Activity::where('task_id',$id)->where('user_id',$user->id)->where('status',1)->orderBy('created_at', 'desc')->first();
 
+                if ($start_last){
                 $timestamp = strtotime($start_last->created_at);// 1つ目の時刻==start_atに代わる物
+                }else{
+                $timestamp = now();
+                }
                 $timestamp2 = strtotime(now());
 
                 
@@ -245,13 +253,18 @@ class User extends Authenticatable
 
                 $start_last = Activity::where('task_id',$id)->where('user_id',$user->id)->orderBy('created_at', 'desc')->first();
 
+                if ($start_last){
                 $timestamp = strtotime($start_last->created_at);// 1つ目の時刻==start_atに代わる物
+                }else{
+                $timestamp = now();
+                }
                 $timestamp2 = strtotime(now());
 
 
                 $task = Task::find($id);
 
-                if ($start_last->status==1){
+                if ($start_last){
+        		if ($start_last->status==1){
                 $timestamp3 =  $timestamp2 - $timestamp;// 2つの時刻の差を計算
                 
                 if ($timestamp3<0){
@@ -288,7 +301,7 @@ class User extends Authenticatable
                 }else{
                     $task->timer = $task->timer + $timestamp3;//時間を加算する
                 }
-                }else{
+                }}else{
                     $task->timer=0;
                 }
                 $task->status = 4;    //0=新規作成 , 1=開始 , [2=停止], 4=完了
