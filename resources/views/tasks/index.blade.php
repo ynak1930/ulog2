@@ -57,16 +57,38 @@
                 $curtime = $category->timersum.'.000';
 
                 $curper = 0.000;
-                $rgbmax = 16777215.000;
+                $rgbmax = 255.000;
 
                 if ($x>0.000000){
                 $curper = $curtime / $x;
                 }else{
-                $x=1.000;
+                $x=1.00;
                 }
                 $curcol = 0.000;
                 $curcol = $rgbmax * $curper;
+
                 $curcolx = dechex($curcol);
+                $curcolx = sprintf('%02s',$curcolx);
+                $curwidth = $curper*100.000;
+                $curwidth = (int)$curwidth;
+                if ($curwidth<=0){
+                    $curwidth=1;
+                }
+                $curcolx = '00'.'00'.$curcolx;
+/*
+                if ($curcol < 65535.000){
+                $curcolx = substr_replace($curcolx, "00", 0, 2);
+                }elseif ($curcol < 255.000){
+                $curcolx = substr_replace($curcolx, "0000", 0, 4);
+                }
+*/
+/*
+                if ($curcol > 65535.000){
+                $curcolx = substr_replace($curcolx, "0000", 2, 4);
+                }elseif ($curcol >255.000){
+                $curcolx = substr_replace($curcolx, "00", 4, 2);
+                }
+*/
 
                 $timers = 0;
                 $timersum = 0;
@@ -84,7 +106,7 @@
                     @endif
                 @endif
             @endforeach
-          <span class='col-sm-9' style="border-bottom: solid 10px #{{$curcolx}};">
+          <span class='col-sm-9' style="border-right: solid {{$curwidth}}px #{{sprintf('%06s',$curcolx)}};">
             {{ $category->category .'('.$taskcnt.')'}} - 
             {{sprintf('%02d', floor( $category->timersum / 3600 ))}}:{{sprintf('%02d',floor( ( $category->timersum / 60 ) % 60 ))}}:{{sprintf('%02d',$category->timersum % 60)}}
           </span>
