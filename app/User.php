@@ -143,6 +143,7 @@ class User extends Authenticatable
                 }
 
                 $this->activities()->attach($id,['content' => $content,'status'=>2,'timer'=>$task->timer]);
+                $task->stop_at = now();
                 $task->updated_at = now();
                 $task->save();
                 
